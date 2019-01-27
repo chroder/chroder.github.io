@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Javascript on Christopher Nadeau</title>
-    <link>https://nadeau.tv/tags/javascript/</link>
+    <link>https://www.nadeau.tv/tags/javascript/</link>
     <description>Recent content in Javascript on Christopher Nadeau</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Sat, 01 Feb 2014 15:38:00 +0000</lastBuildDate>
     
-	<atom:link href="https://nadeau.tv/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.nadeau.tv/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Using NgModelController with Custom Directives</title>
-      <link>https://nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</link>
+      <link>https://www.nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</link>
       <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
       
-      <guid>https://nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</guid>
+      <guid>https://www.nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</guid>
       <description>Creating directives with AngularJS is fairly straightforward. But most directives also need to interact with a model which represents their state. You could bake in your own custom model handling, but you can also plug right in to AngularJS&amp;rsquo;s own NgModelController &amp;ndash; the same ng-model that is used for things like input boxes and select menus.
 Example directive: &amp;lt;time-duration /&amp;gt; As a simple example, let&amp;rsquo;s build a directive where the user can input a duration using one of many possible units of time.</description>
     </item>

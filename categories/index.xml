@@ -2,102 +2,102 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Christopher Nadeau</title>
-    <link>https://nadeau.tv/categories/</link>
+    <link>https://www.nadeau.tv/categories/</link>
     <description>Recent content in Categories on Christopher Nadeau</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Sat, 01 Feb 2014 15:38:00 +0000</lastBuildDate>
     
-	<atom:link href="https://nadeau.tv/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.nadeau.tv/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Angularjs</title>
-      <link>https://nadeau.tv/categories/angularjs/</link>
+      <link>https://www.nadeau.tv/categories/angularjs/</link>
       <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/angularjs/</guid>
+      <guid>https://www.nadeau.tv/categories/angularjs/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Aws</title>
-      <link>https://nadeau.tv/categories/aws/</link>
+      <link>https://www.nadeau.tv/categories/aws/</link>
       <pubDate>Sat, 27 Feb 2016 13:32:41 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/aws/</guid>
+      <guid>https://www.nadeau.tv/categories/aws/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Devops</title>
-      <link>https://nadeau.tv/categories/devops/</link>
+      <link>https://www.nadeau.tv/categories/devops/</link>
       <pubDate>Thu, 16 Jun 2016 16:11:04 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/devops/</guid>
+      <guid>https://www.nadeau.tv/categories/devops/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Javascript</title>
-      <link>https://nadeau.tv/categories/javascript/</link>
+      <link>https://www.nadeau.tv/categories/javascript/</link>
       <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/javascript/</guid>
+      <guid>https://www.nadeau.tv/categories/javascript/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Mac</title>
-      <link>https://nadeau.tv/categories/mac/</link>
+      <link>https://www.nadeau.tv/categories/mac/</link>
       <pubDate>Thu, 03 Mar 2016 10:29:18 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/mac/</guid>
+      <guid>https://www.nadeau.tv/categories/mac/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Mysql</title>
-      <link>https://nadeau.tv/categories/mysql/</link>
+      <link>https://www.nadeau.tv/categories/mysql/</link>
       <pubDate>Thu, 16 Jun 2016 16:11:04 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/mysql/</guid>
+      <guid>https://www.nadeau.tv/categories/mysql/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Productivity</title>
-      <link>https://nadeau.tv/categories/productivity/</link>
+      <link>https://www.nadeau.tv/categories/productivity/</link>
       <pubDate>Tue, 28 Aug 2018 12:00:00 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/productivity/</guid>
+      <guid>https://www.nadeau.tv/categories/productivity/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Products</title>
-      <link>https://nadeau.tv/categories/products/</link>
+      <link>https://www.nadeau.tv/categories/products/</link>
       <pubDate>Sat, 01 Feb 2014 15:05:00 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/products/</guid>
+      <guid>https://www.nadeau.tv/categories/products/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Quickie</title>
-      <link>https://nadeau.tv/categories/quickie/</link>
+      <link>https://www.nadeau.tv/categories/quickie/</link>
       <pubDate>Thu, 03 Mar 2016 10:29:18 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/quickie/</guid>
+      <guid>https://www.nadeau.tv/categories/quickie/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Security</title>
-      <link>https://nadeau.tv/categories/security/</link>
+      <link>https://www.nadeau.tv/categories/security/</link>
       <pubDate>Sat, 27 Feb 2016 13:33:16 +0000</pubDate>
       
-      <guid>https://nadeau.tv/categories/security/</guid>
+      <guid>https://www.nadeau.tv/categories/security/</guid>
       <description></description>
     </item>
     
