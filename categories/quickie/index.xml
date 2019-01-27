@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Quickie on Christopher Nadeau</title>
+    <link>https://nadeau.tv/categories/quickie/</link>
+    <description>Recent content in Quickie on Christopher Nadeau</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Thu, 03 Mar 2016 10:29:18 +0000</lastBuildDate>
+    
+	<atom:link href="https://nadeau.tv/categories/quickie/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Quickie: Prevent Mac apps from quitting when last window is closed</title>
+      <link>https://nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</link>
+      <pubDate>Thu, 03 Mar 2016 10:29:18 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</guid>
+      <description>There are a few apps on OSX that quit/terminate once their window is closed. This is typical on Windows of course, but it&amp;rsquo;s a bit random on OSX. Some (most?) apps stay open, and some close. I find it really bloody annoying. I&amp;rsquo;ll quit my apps when I&amp;rsquo;m ready to quit them, thank you very much.
+The biggest sore spot with me is 1password which I use dozens of times a day, and every time I CMD+W to close the window (muscle memory!</description>
+    </item>
+    
+    <item>
+      <title>Quickie: Quickly rename MySQL database</title>
+      <link>https://nadeau.tv/post/quickie-quickly-rename-mysql-database/</link>
+      <pubDate>Wed, 02 Mar 2016 17:42:43 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/quickie-quickly-rename-mysql-database/</guid>
+      <description>There&amp;rsquo;s no way to rename a MySQL database. Typical advice is to dump/restore the database, but this is obviously very slow if you have a huge database.
+I found a solution today. Create your database, then execute this one-line:
+mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &amp;quot;rename table OLD_DB.$t to NEW_DB.$t&amp;quot;; done   Obviously replace the params as necessary.</description>
+    </item>
+    
+  </channel>
+</rss>

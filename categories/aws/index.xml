@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Aws on Christopher Nadeau</title>
+    <link>https://nadeau.tv/categories/aws/</link>
+    <description>Recent content in Aws on Christopher Nadeau</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Sat, 27 Feb 2016 13:32:41 +0000</lastBuildDate>
+    
+	<atom:link href="https://nadeau.tv/categories/aws/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>AWS VPC Network Structure</title>
+      <link>https://nadeau.tv/post/aws-vpc-network-structure/</link>
+      <pubDate>Sat, 27 Feb 2016 13:32:41 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/aws-vpc-network-structure/</guid>
+      <description>I recently started playing around with AWS. One of the really cool things about AWS is the Virtual Private Cloud (VPC) features. By creating a VPC, you create a private network for yourself complete with NAT gateways, custom route tables, firewalls and more.
+VPC Components A VPC is made up of several main components:
+CIDR Block
+When you create your VPC, you are asked to define a CIDR block, which is the range of IP addresses you want your VPC to use.</description>
+    </item>
+    
+  </channel>
+</rss>

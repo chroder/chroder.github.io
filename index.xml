@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christopher Nadeau</title>
+    <link>https://nadeau.tv/</link>
+    <description>Recent content on Christopher Nadeau</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Thu, 08 Nov 2018 15:54:31 +0000</lastBuildDate>
+    
+	<atom:link href="https://nadeau.tv/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>SPF, DKIM, DMARC: What they do and what they don&#39;t</title>
+      <link>https://nadeau.tv/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</link>
+      <pubDate>Thu, 08 Nov 2018 15:54:31 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</guid>
+      <description>Email is such a mess of technologies and standards, it&amp;rsquo;s hard to understand how everything works together. When it comes to SPF, DKIM, DMARC, there are some misconceptions.
+The major misconception is around what SPF and DKIM actually do. Many people think that SPF and DKIM are somehow related to controlling who can send messages From your domain, but that&amp;rsquo;s not totally true.
+The first thing to understand is that there are two email addresses in an email:</description>
+    </item>
+    
+    <item>
+      <title>Configure a Hyper Key on OSX</title>
+      <link>https://nadeau.tv/post/configure-hyper-key-osx/</link>
+      <pubDate>Tue, 28 Aug 2018 12:00:00 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/configure-hyper-key-osx/</guid>
+      <description>If you&amp;rsquo;re anything like me, you like keyboard shortcuts. I like to set up custom shortcuts and macros to automate everything I can. The problem is that the most convenient keyboard combinations are already in use by the OS or by user applications.
+That&amp;rsquo;s where the Hyper Key (also sometimes called a Super Key) comes in. Basically: Get rid of the useless caps-lock key and turn it into a new modifier key that isn&amp;rsquo;t used by anything else.</description>
+    </item>
+    
+    <item>
+      <title>Nginx proxy_pass DNS Cache</title>
+      <link>https://nadeau.tv/post/nginx-proxy_pass-dns-cache/</link>
+      <pubDate>Fri, 31 Mar 2017 10:00:12 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/nginx-proxy_pass-dns-cache/</guid>
+      <description>We use nginx to proxy to an Amazon S3 bucket to serve static content to customers. Yesterday, I noticed a high failure rate through the proxy but I couldn&amp;rsquo;t figure out why.
+After some debugging, I finally discovered that the IP address nginx was hitting was different from the one that DNS was returning. It turns out that nginx resolves hostnames only once on load, meaning whatever IP address it got on load would stick around until reload.</description>
+    </item>
+    
+    <item>
+      <title>pt-online-schema-change error &#34;Error creating new table ... duplicate key&#34;</title>
+      <link>https://nadeau.tv/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</link>
+      <pubDate>Thu, 16 Jun 2016 16:11:04 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</guid>
+      <description>pt-online-schema-change is a tool in the Percona Toolkit which allows you to make large table alters without locking the database.
+Newer versions of MySQL have Online DDL which reduce the need for this tool. But if you&amp;rsquo;re like us, pt-online-schema-change is still very valuable because we use Galera. Running a DDL query on a Galera cluster blocks the entire cluster (even other databases in the same cluster).
+I&amp;rsquo;ve successfully used pt-online-schema-change in the past with great success.</description>
+    </item>
+    
+    <item>
+      <title>Quickie: Prevent Mac apps from quitting when last window is closed</title>
+      <link>https://nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</link>
+      <pubDate>Thu, 03 Mar 2016 10:29:18 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</guid>
+      <description>There are a few apps on OSX that quit/terminate once their window is closed. This is typical on Windows of course, but it&amp;rsquo;s a bit random on OSX. Some (most?) apps stay open, and some close. I find it really bloody annoying. I&amp;rsquo;ll quit my apps when I&amp;rsquo;m ready to quit them, thank you very much.
+The biggest sore spot with me is 1password which I use dozens of times a day, and every time I CMD+W to close the window (muscle memory!</description>
+    </item>
+    
+    <item>
+      <title>Quickie: Quickly rename MySQL database</title>
+      <link>https://nadeau.tv/post/quickie-quickly-rename-mysql-database/</link>
+      <pubDate>Wed, 02 Mar 2016 17:42:43 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/quickie-quickly-rename-mysql-database/</guid>
+      <description>There&amp;rsquo;s no way to rename a MySQL database. Typical advice is to dump/restore the database, but this is obviously very slow if you have a huge database.
+I found a solution today. Create your database, then execute this one-line:
+mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &amp;quot;rename table OLD_DB.$t to NEW_DB.$t&amp;quot;; done   Obviously replace the params as necessary.</description>
+    </item>
+    
+    <item>
+      <title>SSH with a Bastion Host</title>
+      <link>https://nadeau.tv/post/ssh-with-a-bastion-host/</link>
+      <pubDate>Sat, 27 Feb 2016 13:33:16 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/ssh-with-a-bastion-host/</guid>
+      <description>A bastion host is a server that sits on a public network whose sole purpose is to provide access to an inner private network.
+For example, if you use AWS and have instances on a private VPC subnet, then the only way you can gain SSH access to them is to use a bastion host as a kind of proxy.
+You &amp;gt; Bastion &amp;gt; Server  For the best security, you typically have SSH configured for key-only authentication.</description>
+    </item>
+    
+    <item>
+      <title>AWS VPC Network Structure</title>
+      <link>https://nadeau.tv/post/aws-vpc-network-structure/</link>
+      <pubDate>Sat, 27 Feb 2016 13:32:41 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/aws-vpc-network-structure/</guid>
+      <description>I recently started playing around with AWS. One of the really cool things about AWS is the Virtual Private Cloud (VPC) features. By creating a VPC, you create a private network for yourself complete with NAT gateways, custom route tables, firewalls and more.
+VPC Components A VPC is made up of several main components:
+CIDR Block
+When you create your VPC, you are asked to define a CIDR block, which is the range of IP addresses you want your VPC to use.</description>
+    </item>
+    
+    <item>
+      <title>Setting up a new MySQL slave database via steaming xtrabackup</title>
+      <link>https://nadeau.tv/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/</link>
+      <pubDate>Wed, 27 Jan 2016 18:16:45 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/</guid>
+      <description>The goal today is to build a new MySQL slave database off an existing database. We&amp;rsquo;ll use Percona&amp;rsquo;s xtrabackup to stream a hot backup over the wire to a new machine, while keeping the existing server online.
+Prep Install MySQL on New Server
+Install MySQL in the way you normally would (e.g., apt-get etc).
+The only very important thing you need to do is edit my.cnf and set a server-id for the server.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://nadeau.tv/about/</link>
+      <pubDate>Sun, 17 Jan 2016 13:27:50 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/about/</guid>
+      <description>   I’m Christopher Nadeau. I’m the CTO over at Deskpro. I like writing and shipping software, and building businesses. Connect  GitHub: @chroder Twitter: @chroder Email: &amp;#099;&amp;#104;&amp;#114;&amp;#105;&amp;#115;&amp;#064;&amp;#110;&amp;#097;&amp;#100;&amp;#101;&amp;#097;&amp;#117;&amp;#046;&amp;#116;&amp;#118;  Tweets by @chroder !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?&#39;http&#39;:&#39;https&#39;;if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+&#34;://platform.twitter.com/widgets.js&#34;;fjs.parentNode.insertBefore(js,fjs);}}(document,&#34;script&#34;,&#34;twitter-wjs&#34;);   The elephant icon logo is made by Freepic (CC BY 3.0).   </description>
+    </item>
+    
+    <item>
+      <title>Using NgModelController with Custom Directives</title>
+      <link>https://nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</link>
+      <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</guid>
+      <description>Creating directives with AngularJS is fairly straightforward. But most directives also need to interact with a model which represents their state. You could bake in your own custom model handling, but you can also plug right in to AngularJS&amp;rsquo;s own NgModelController &amp;ndash; the same ng-model that is used for things like input boxes and select menus.
+Example directive: &amp;lt;time-duration /&amp;gt; As a simple example, let&amp;rsquo;s build a directive where the user can input a duration using one of many possible units of time.</description>
+    </item>
+    
+    <item>
+      <title>Ditching Google</title>
+      <link>https://nadeau.tv/post/ditching-google/</link>
+      <pubDate>Sat, 01 Feb 2014 15:05:00 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/ditching-google/</guid>
+      <description>Over the years, there have been so many blog posts determined to convince us that Google is becoming evil. This isn&amp;rsquo;t one of those kinds of rants. I don&amp;rsquo;t really mind Google as a company. I love my Nexus 5, I still use Google search and I love Google Chrome. I think they do some pretty stupid stuff from time to time (more on this below), but I don&amp;rsquo;t think they&amp;rsquo;re fundamentally an evil company and my moving away from them isn&amp;rsquo;t some kind of political statement.</description>
+    </item>
+    
+  </channel>
+</rss>

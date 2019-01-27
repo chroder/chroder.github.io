@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
+
+        <title>AWS VPC Network Structure</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+
+          
+          <span class="navbar-brand mb-0 h1"></span>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation" name="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link " href="/">Home</a>
+              <a class="nav-item nav-link" href="https://github.com/chroder" target="_blank">GitHub</a>
+              
+              <a class="nav-item nav-link " href="/about/">About</a>
+            </div>
+          </div>
+        </nav>
+
+        <section id="page-title">
+          <h1><a href="/">Christopher Nadeau</a></h1>
+          <span id="author-name">
+            <h6><a href="/about/"></a></h6>
+          </span>
+        </section>
+
+
+<div class="blog-post">
+  <h1>AWS VPC Network Structure</h1>
+  <div class="blog-post-subheader">
+    <time>27 Feb 2016</time>
+  </div>
+  <div class="blog-post-content">
+    
+
+<p>I recently started playing around with AWS. One of the really cool things about AWS is the Virtual Private Cloud  (VPC) features. By creating a VPC, you create a private network for yourself complete with NAT gateways, custom route tables, firewalls and more.</p>
+
+<h2 id="vpc-components">VPC Components</h2>
+
+<p>A VPC is made up of several main components:</p>
+
+<p><strong>CIDR Block</strong></p>
+
+<p>When you create your VPC, you are asked to define a CIDR block, which is the range of IP addresses you want your VPC to use. For example, <code>10.0.0.0/16</code> means you can use <code>10.0.0.0 - 10.0.255.255</code> (65,534 addresses).</p>
+
+<p><strong>Subnets</strong></p>
+
+<p>A subnet is a CIDR block within your VPC that you want to group together. Instances you launch into your VPC are assigned a subnet, and the subnet defines how network traffic is routed. For example, if a subnet has a route table that is able to route traffic through the internet gateway, then it&rsquo;s <em>public</em> because it&rsquo;s connected to the internet. Otherwise it&rsquo;s <em>private</em>.</p>
+
+<p><strong>Security Groups &amp; Network ACLs</strong></p>
+
+<p>Both Security Groups and Network ACLs are collections of firewall rules that define which ingress and egress network traffic is allowed.</p>
+
+<p>There are a few differences between them:</p>
+
+<ul>
+<li>Security Groups are applied to specific instances and can be stateful (similar to iptables). Security Groups filter traffic to and from <em>instances</em>.</li>
+<li>Network ACLs provide <em>stateless</em> filtering on traffic entering or leaving a <em>subnet</em>. Traffic that stays within the same subnet is not filtered.</li>
+</ul>
+
+<p>So both have their place. I usually just use Security Groups.</p>
+
+<p><strong>Route Tables</strong></p>
+
+<p>Route tables are assigned to subnets and define how traffic within the subnet is routed to various destinations. For example, a route table defines if and how traffic is routed to the wider internet.</p>
+
+<p><strong>Internet Gateways</strong></p>
+
+<p>The Internet Gateway is how your VPC connects to the internet. You use an Internet Gateway with a route table to tell the VPC how internet traffic gets to the internet.</p>
+
+<p>An Internet Gateway appears in the VPC as just a name. Amazon manages the gateway and there&rsquo;s nothing you really have a say in (other than to use it or not; remember that you might want a completely segmented subnet that cannot access the internet at all).</p>
+
+<p><strong>Elastic IPs</strong></p>
+
+<p>An Elastic IP is a static IP address you reserve and can attach to specific network interfaces.</p>
+
+<p>An EIP is the only way to get a static IP within AWS.</p>
+
+<p><strong>NAT Gateways</strong></p>
+
+<p>A NAT Gateway allows you to have private instances who can connect to the greater internet (that is, it performs NAT translation) through one of your elastic IPs.</p>
+
+<p><strong>Availability Zones</strong></p>
+
+<p>A VPC is region-specific, but covers all availability zones within the region.</p>
+
+<p>Each subnet you define is assigned to a specific zone. This factors into your subnet design.</p>
+
+<p>While each subnet is assigned a specific zone, you can of course communicate across the network to instances in any zone.</p>
+
+<h2 id="subnet-design">Subnet Design</h2>
+
+<p>One of the most important things to think about when creating your VPC is the design of your subnets. This matters a lot because you cannot change your subnets (well, not without disrupting your services and configuration!).</p>
+
+<p>Your goal is about designing the subnets such that you solve todays problems, but leaving yourself enough room to grow to accommodate tomorrows problems. This basically comes down to limiting the size of your subnets (you can always add <em>new</em> subnets later).</p>
+
+<p>Here&rsquo;s my advice for a &ldquo;small&rdquo; (relatively) VPC:</p>
+
+<ul>
+<li>Start with two availability zones and dedicate <code>/21</code> blocks to each (2048 addresses).</li>
+<li>In each zone, define subnets for public and private traffic. For each of those subnets, dedicate a <code>/23</code> block (512 addresses).</li>
+</ul>
+
+<p>So with this means you&rsquo;ll define 4 subnets (2 per zone), but leave yourself loads of room for expansion if you need it.</p>
+
+<ul>
+<li>Zone A - <code>10.0.0.0/21 (10.0.0.0 - 10.0.7.255)</code>
+
+<ul>
+<li>Subnet A Public - <code>10.0.0.0/23  (10.0.0.0 - 10.0.1.255)</code></li>
+<li>Subnet A Private - <code>10.0.2.0/23 (10.0.2.0 - 10.0.3.255)</code></li>
+<li>The rest of the block is unused, so could be used for something else later.</li>
+</ul></li>
+<li>Zone B - <code>10.0.8.0/21 (10.0.8.0 - 10.0.15.255)</code>
+
+<ul>
+<li>Subnet B Public - <code>10.0.8.0/23  (10.0.8.0 - 10.0.9.255)</code></li>
+<li>Subnet B Private - <code>10.0.10.0/23 (10.0.10.0 - 10.0.11.255)</code></li>
+<li>The rest of the block is unused, so could be used for something later.</li>
+</ul></li>
+<li>The rest of the VPC block is unused, so you have lots of room for expansion later.</li>
+</ul>
+
+<p>Remember that some of this is just logical grouping of IP addresses (i.e. deciding that <code>10.0.0.0/21</code> is all &ldquo;Zone A&rdquo;), some of it is practical (subnets have ACLs, route tables, etc) and some of it is just leaving yourself space to grow.</p>
+
+<p>What you DON&rsquo;T want to do is go crazy and use the entire VPC block of addresses in a single subnet. Leave yourself plenty of free space, you never know when you might need to create a new subnet.</p>
+
+<h2 id="public-vs-private-and-nat-gateways">Public vs Private and NAT Gateways</h2>
+
+<p>A public subnet means a subnet that has internet traffic routed through AWS&rsquo;s Internet Gateway. Any instance within a public subnet can have a public IP assigned to it (e.g. an EC2 instance with &ldquo;associate public ip address&rdquo; enabled).</p>
+
+<p>A private subnet means the instances are <em>not</em> publicly accessible from the internet. They do NOT have a public IP address. For example, you cannot access them directly via SSH. Instances on private subnets may still access the internet themselves though (i.e. by using a NAT Gateway).</p>
+
+<p>A NAT Gateway is comprised of:</p>
+
+<ul>
+<li>The NAT Gateway itself. This is a highly available instance managed by AWS. You <em>could</em> create an EC2 instance and manage it yourself, but the NAT Gateway is usually the simpler option.</li>
+<li>An Elastic IP. This is the public IP that your gateway uses to communicate with the outside world.</li>
+</ul>
+
+<p>To use a NAT Gateway:</p>
+
+<ol>
+<li>Create an Elastic IP</li>
+<li>Create a NAT Gateway
+
+<ul>
+<li>Assign the Elastic IP you just created</li>
+<li>Set the Subnet to your <em>public</em> subnet. (It must be on the public subnet or else it won&rsquo;t be routable).</li>
+</ul></li>
+<li>Create a new Route Table
+
+<ul>
+<li>Add a new route with destination <code>0.0.0.0/0</code> and target being your new NAT Gateway.</li>
+</ul></li>
+<li>Assign this route table to your <em>private</em> subnet.</li>
+</ol>
+
+<h3 id="accessing-private-instances-via-a-bastion-host">Accessing Private Instances via a Bastion Host</h3>
+
+<p>Instances that exist on a private subnet are inaccessible directly from the internet. Instances can <em>use</em> the internet via the gateway, but there&rsquo;s no way for you to access the instance from the internet. For example, you can&rsquo;t SSH into it, you can&rsquo;t serve a website from it, etc.</p>
+
+<p>If you are running a web service like a web server, SMTP server, etc, then this is usually fine because you typically use a proxy or node balancer that has a public interface and then passes traffic through to your private subnet.</p>
+
+<p>However, you still often need access to the server for sysadmin type work or debugging. This is done by spinning up a <em>bastion host</em>.</p>
+
+<p>A <em>bastion host</em> is the name for a public instance whose purpose is specifically about providing access to services on an internal network. Since this host is public, it is often security-hardened and expected to withstand attack.</p>
+
+<p>In our VPC scenario, we typically only need a bastion host so we can SSH into the servers in the private subnet. For this purpose, the bastion doesn&rsquo;t need to be big; a <code>t2.micro</code> instance is likely enough for most workloads. All you need it for is to act as a middle-man for SSH:</p>
+
+<pre><code>You &gt; SSH into bastion &gt; SSH into server
+</code></pre>
+
+<p>A <code>t2.micro</code> is usually enough to support a dozen connections.</p>
+
+<h2 id="ssh-and-bastion-hosts">SSH and Bastion Hosts</h2>
+
+<p>EC2 instances by default use key files to authenticate SSH sessions. Obviously you want to keep this as it&rsquo;s the most secure method.</p>
+
+<p>But this presents a problem. You can connect to your bastion server with a key &ndash; that&rsquo;s fine. But then your bastion server needs to have the keys to connect to every other server on your VPC private network. In other words, your bastion server has the keys to everything. That&rsquo;s not so good.</p>
+
+<p>The best way I&rsquo;ve found to square this problem is to use SSH proxying. I&rsquo;ve got another article about that here: <a href="https://www.nadeau.tv/ssh-with-a-bastion-host/">SSH with a bastion host</a>.</p>
+
+  </div>
+</div>
+
+      <footer>
+        <hr>
+        <small>
+          &copy; 2019 
+        </small>
+      </footer>
+    </div> 
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    var clicky_site_ids = clicky_site_ids || [];
+    clicky_site_ids.push(101151077);
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//static.getclicky.com/js';
+      ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+    })();
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101151077ns.gif" /></p></noscript>
+  </body>
+</html>
+

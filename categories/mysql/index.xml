@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mysql on Christopher Nadeau</title>
+    <link>https://nadeau.tv/categories/mysql/</link>
+    <description>Recent content in Mysql on Christopher Nadeau</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Thu, 16 Jun 2016 16:11:04 +0000</lastBuildDate>
+    
+	<atom:link href="https://nadeau.tv/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>pt-online-schema-change error &#34;Error creating new table ... duplicate key&#34;</title>
+      <link>https://nadeau.tv/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</link>
+      <pubDate>Thu, 16 Jun 2016 16:11:04 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</guid>
+      <description>pt-online-schema-change is a tool in the Percona Toolkit which allows you to make large table alters without locking the database.
+Newer versions of MySQL have Online DDL which reduce the need for this tool. But if you&amp;rsquo;re like us, pt-online-schema-change is still very valuable because we use Galera. Running a DDL query on a Galera cluster blocks the entire cluster (even other databases in the same cluster).
+I&amp;rsquo;ve successfully used pt-online-schema-change in the past with great success.</description>
+    </item>
+    
+    <item>
+      <title>Quickie: Quickly rename MySQL database</title>
+      <link>https://nadeau.tv/post/quickie-quickly-rename-mysql-database/</link>
+      <pubDate>Wed, 02 Mar 2016 17:42:43 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/quickie-quickly-rename-mysql-database/</guid>
+      <description>There&amp;rsquo;s no way to rename a MySQL database. Typical advice is to dump/restore the database, but this is obviously very slow if you have a huge database.
+I found a solution today. Create your database, then execute this one-line:
+mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &amp;quot;rename table OLD_DB.$t to NEW_DB.$t&amp;quot;; done   Obviously replace the params as necessary.</description>
+    </item>
+    
+  </channel>
+</rss>

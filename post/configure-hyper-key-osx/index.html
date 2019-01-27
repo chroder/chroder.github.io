@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
+
+        <title>Configure a Hyper Key on OSX</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+
+          
+          <span class="navbar-brand mb-0 h1"></span>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation" name="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link " href="/">Home</a>
+              <a class="nav-item nav-link" href="https://github.com/chroder" target="_blank">GitHub</a>
+              
+              <a class="nav-item nav-link " href="/about/">About</a>
+            </div>
+          </div>
+        </nav>
+
+        <section id="page-title">
+          <h1><a href="/">Christopher Nadeau</a></h1>
+          <span id="author-name">
+            <h6><a href="/about/"></a></h6>
+          </span>
+        </section>
+
+
+<div class="blog-post">
+  <h1>Configure a Hyper Key on OSX</h1>
+  <div class="blog-post-subheader">
+    <time>28 Aug 2018</time>
+  </div>
+  <div class="blog-post-content">
+    
+
+<p>If you&rsquo;re anything like me, you like keyboard shortcuts. I like to set up custom shortcuts and macros to automate everything I can. The problem is that the most convenient keyboard combinations are already in use by the OS or by user applications.</p>
+
+<p>That&rsquo;s where the Hyper Key (also sometimes called a <em>Super Key</em>) comes in. Basically: Get rid of the useless caps-lock key and turn it into a new modifier key that isn&rsquo;t used by anything else. For example, maybe you want <code>HYPER+V</code> to mean &ldquo;Paste without formatting&rdquo;.</p>
+
+<blockquote>
+<p>Check out <a href="http://askubuntu.com/q/19558">this AskUbuntu post</a> for some history behind the &ldquo;Super&rdquo; and &ldquo;Hyper&rdquo; keys.</p>
+</blockquote>
+
+<h1 id="how-it-works">How it works</h1>
+
+<p>We&rsquo;re going to use Karabiner-Elements to re-map the caps-lock key to <code>CMD+CTRL+OPTION+SHIFT</code>. This combination of keys is awkward to press on a keyboard so it&rsquo;s generally un-used by applications, which makes it a perfect candidate for our custom super key.</p>
+
+<h2 id="setup">Setup</h2>
+
+<p>The setup these days is a lot more straight-forward than it used to be when I first wrote this article! This is the updated instructions as of macOS High Sierra.</p>
+
+<h3 id="step-1-install-the-software">Step 1: Install the software</h3>
+
+<p>Head on over to <a href="https://pqrs.org/osx/karabiner/">Karabiner-Elements home page</a> to download and install the version for your version of macOS.</p>
+
+<h3 id="step-2-remap-caps-lock-key">Step 2: Remap caps-lock key</h3>
+
+<ul>
+<li>Open Karabiner-Elements.</li>
+<li>Switch to the <em>Complex Modifications</em> tab.</li>
+<li>In the <em>Rules</em> section, click the <em>Add rule</em> button at the bottom left of the window.</li>
+<li>One of default example rules is the one we want. Click <em>Enable</em> next to the example <em>Change caps lock to&hellip;</em> rule.</li>
+</ul>
+
+<figure>
+    <img src="/post-files/configure-hyper-key-osx/image.png" width="93%"/> 
+</figure>
+
+
+<h2 id="test-it-out">Test it out</h2>
+
+<p>At this point, whenever you hold your caps lock key, it&rsquo;s the same as if you were pressing <code>CMD+CTRL+OPTION+SHIFT</code>.</p>
+
+<p>You can test this out with the <em>EventViewer</em>. From your Menu Bar, click the Karabiner-Elements icon and select <em>EventViewer.</em></p>
+
+<figure>
+    <img src="/post-files/configure-hyper-key-osx/image-2.png" width="93%"/> 
+</figure>
+
+
+<h2 id="practical-applications">Practical Applications</h2>
+
+<p>Now it&rsquo;s up to you how you want to actually use this key. You can begin using it right away by just assigning the key to macOS keyboard combinations.</p>
+
+<p>From <em>System Preferences &gt; Keyboard</em>, go to the <em>Shortcuts</em> tab. From here you can assign keyboard shortcuts to standard macOS features; but you can also go to &ldquo;App Shortcuts&rdquo; and set or override shortcuts on any menu item in specific apps.</p>
+
+<p>For example, in PathFinder, you can save a certain window configuration (tabs etc) and it appears in the File menu. That means I can assign a key combo to it.</p>
+
+<figure>
+    <img src="/post-files/configure-hyper-key-osx/image-3.png" width="93%"/> 
+</figure>
+
+
+<figure>
+    <img src="/post-files/configure-hyper-key-osx/image-5.png" width="93%"/> 
+</figure>
+
+
+<h2 id="keyboard-maestro">Keyboard Maestro</h2>
+
+<p>If you want to get even more out of your new hyper key, check out <a href="https://www.keyboardmaestro.com/main/">Keyboard Maestro</a>.</p>
+
+<p>KM is an amazing automation machine. You define macros (i.e. series of actions to perform) in response to a variety of events – including key combinations.</p>
+
+<p>For example, I have <code>SUPER+V</code> assigned to &ldquo;Paste without formatting&rdquo; that I use dozens of times a day.</p>
+
+<figure>
+    <img src="/post-files/configure-hyper-key-osx/image-6.png" width="93%"/> 
+</figure>
+
+
+  </div>
+</div>
+
+      <footer>
+        <hr>
+        <small>
+          &copy; 2019 
+        </small>
+      </footer>
+    </div> 
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    var clicky_site_ids = clicky_site_ids || [];
+    clicky_site_ids.push(101151077);
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//static.getclicky.com/js';
+      ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+    })();
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101151077ns.gif" /></p></noscript>
+  </body>
+</html>
+

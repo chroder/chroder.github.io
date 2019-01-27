@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Christopher Nadeau</title>
+    <link>https://nadeau.tv/tags/</link>
+    <description>Recent content in Tags on Christopher Nadeau</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Sat, 01 Feb 2014 15:38:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://nadeau.tv/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Angularjs</title>
+      <link>https://nadeau.tv/tags/angularjs/</link>
+      <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/angularjs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Aws</title>
+      <link>https://nadeau.tv/tags/aws/</link>
+      <pubDate>Sat, 27 Feb 2016 13:32:41 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/aws/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Devops</title>
+      <link>https://nadeau.tv/tags/devops/</link>
+      <pubDate>Thu, 16 Jun 2016 16:11:04 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/devops/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Javascript</title>
+      <link>https://nadeau.tv/tags/javascript/</link>
+      <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/javascript/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mac</title>
+      <link>https://nadeau.tv/tags/mac/</link>
+      <pubDate>Thu, 03 Mar 2016 10:29:18 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/mac/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mysql</title>
+      <link>https://nadeau.tv/tags/mysql/</link>
+      <pubDate>Thu, 16 Jun 2016 16:11:04 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/mysql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Productivity</title>
+      <link>https://nadeau.tv/tags/productivity/</link>
+      <pubDate>Tue, 28 Aug 2018 12:00:00 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/productivity/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Products</title>
+      <link>https://nadeau.tv/tags/products/</link>
+      <pubDate>Sat, 01 Feb 2014 15:05:00 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/products/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Quickie</title>
+      <link>https://nadeau.tv/tags/quickie/</link>
+      <pubDate>Thu, 03 Mar 2016 10:29:18 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/quickie/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Security</title>
+      <link>https://nadeau.tv/tags/security/</link>
+      <pubDate>Sat, 27 Feb 2016 13:33:16 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/tags/security/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

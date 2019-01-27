@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
+
+        <title>SPF, DKIM, DMARC: What they do and what they don&#39;t</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+
+          
+          <span class="navbar-brand mb-0 h1"></span>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation" name="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link " href="/">Home</a>
+              <a class="nav-item nav-link" href="https://github.com/chroder" target="_blank">GitHub</a>
+              
+              <a class="nav-item nav-link " href="/about/">About</a>
+            </div>
+          </div>
+        </nav>
+
+        <section id="page-title">
+          <h1><a href="/">Christopher Nadeau</a></h1>
+          <span id="author-name">
+            <h6><a href="/about/"></a></h6>
+          </span>
+        </section>
+
+
+<div class="blog-post">
+  <h1>SPF, DKIM, DMARC: What they do and what they don&#39;t</h1>
+  <div class="blog-post-subheader">
+    <time>08 Nov 2018</time>
+  </div>
+  <div class="blog-post-content">
+    
+
+<p>Email is such a mess of technologies and standards, it&rsquo;s hard to understand how everything works together. When it comes to SPF, DKIM, DMARC, there are some misconceptions.</p>
+
+<p>The major misconception is around what SPF and DKIM actually do. Many people think that SPF and DKIM are somehow related to controlling who can send messages <em>From</em> your domain, but that&rsquo;s not totally true.</p>
+
+<p>The first thing to understand is that there are <em>two</em> email addresses in an email:</p>
+
+<ul>
+<li>The <code>From:</code> header is what everyone is most familiar with. This is what you see in your email client as the sender.</li>
+<li>The other is <code>MAIL FROM</code> which is usually invisible to users.</li>
+</ul>
+
+<h1 id="envelope-vs-message">Envelope vs message</h1>
+
+<p>SMTP is the protocol used to send email. When using SMTP to send email, there are actually two parts.</p>
+
+<p>The <em>envelope</em> (<a href="https://tools.ietf.org/html/rfc5321">RFC 5321</a>) is a set of properties that are provided to an SMTP server that defines who&rsquo;s sending the message and where the message should be sent.</p>
+
+<p>The <em>message</em> (<a href="https://tools.ietf.org/html/rfc5322">RFC 5322</a>) is the actual email message that you&rsquo;re most familiar with: It contains email headers, content such as text and HTML, attachments, etc.</p>
+
+<p>There&rsquo;s some overlap here though. The <em>envelope</em> includes a property for <code>MAIL FROM</code> which is a bit like the <code>From:</code> header, and it also has a property for <code>RCPT TO</code> which is a bit like <code>To:</code> and <code>Cc:</code> headers.</p>
+
+<p>The important thing to realise though is that they are completely different things. The properties in the envelope can be completely different from the related headers in the message itself.</p>
+
+<p>This is how something like a BCC works: You can define a recipient in the envelope with <code>RCPT TO</code> but not list it in the message <code>To:</code> or <code>Cc:</code> headers. That results in the message being sent to the recipient, but no one would know (hence the &ldquo;blind&rdquo; in &ldquo;blind carbon copy&rdquo;) because there&rsquo;s no record of it in the actual email body.</p>
+
+<p>Similarly, the message envelope can be from an email address that is different from the <code>From:</code> header that you see in your email client.</p>
+
+<p>So the <em>envelope</em> is a protocol thing; it helps SMTP servers route messages through the internet. The <em>message</em> is the actual thing you get into your email inbox that gets decoded and rendered to your screen as a user.</p>
+
+<h2 id="so-what-is-mail-from">So what is <code>MAIL FROM</code>?</h2>
+
+<p><code>MAIL FROM</code> in the envelope is there so messages can be returned in the case of errors such as a bounce. If a message bounces, then the SMTP server on the receiving end knows to return the message to the sender declared in the <code>MAIL FROM</code>. (As a user, you can usually see the value in the <code>Return-Path</code> header. Most mail servers will modify the message itself to add this header.)</p>
+
+<p>In simple cases, the <code>MAIL FROM</code> and the <code>From:</code> header are the same. For example, if you send an email from your iPhone, then most likely the two values will be the same email address. If you send an email to someone and make a typo in their email address, then you get a bounce message back to your inbox.</p>
+
+<p>But sometimes you might want to return messages to a <em>different</em> email address. This is really common today where services want to automatically catch and process bounces. For example, imagine if you&rsquo;re sending a few million email newsletters – you&rsquo;ll want to automatically catch and remove bogus email addresses so you don&rsquo;t send to it next time.</p>
+
+<p>This is often done by using a special mailbox where software can monitor emails and process them accordingly. For example:</p>
+
+<pre><code>MAIL FROM: &lt;user=example.com@bounce-detection.my-site.com&gt;
+
+From: newsletter@my-site.com
+To: user@example.com
+Subject: My greate newsletter
+...
+</code></pre>
+
+<p>The software might listen on emails sent to anything <code>@bounce-detection.my-site.com</code> and handle it.</p>
+
+<h1 id="spf">SPF</h1>
+
+<p>SPF verifies that the server sending a message is allowed to send. A domain owner publishes a DNS record that declares the IP addresses of all the servers that are able to send from that domain. If SPF fails, then depending on the policy defined, the message might be classified as spam or dropped completely.</p>
+
+<p>The key thing to recognise here is that this validation applies to <code>MAIL FROM</code> and <em>not</em> the <code>From:</code> header. As we discussed above, these are two completely different things. For example:</p>
+
+<pre><code>MAIL FROM: &lt;malicious-user@bad-actor.com&gt;
+From: contact@your-bank.com
+</code></pre>
+
+<p>When a receiving server gets a message here, it will look-up the SPF record for <code>bad-actor.com</code> and verify that the server sending the message is published in the record. It doesn&rsquo;t look at or care that the actual <code>From:</code> address is totally unrelated.</p>
+
+<p>In other words, anyone can just go and buy a domain and validate their own SPF records. They can spoof the <code>From:</code> address that the user sees and the message would still pass SPF checks.</p>
+
+<p>So SPF checking by itself doesn&rsquo;t do much to prevent spam and spoofing, but it <em>does</em> make bad actors easier to trace and easier to handle once found.</p>
+
+<h1 id="dkim">DKIM</h1>
+
+<p>DKIM is a method to sign email messages in such a way where the receiving email server can verify the integrity of the message is valid.</p>
+
+<p>An administrator or email provider has a secret private key that is used to generate a signature that gets added to the message. It looks a bit like this:</p>
+
+<pre><code>DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=foobar;
+	...
+</code></pre>
+
+<p>The signature declares a domain (d) and a selector (s). To validate the message, you fetch the <em>public key</em> from <code>$selector._domainkey.$domain</code> – which is a TXT record. Using the public key you can verify the provided signature is valid.</p>
+
+<p>Note that the domain can be anything here, which means DKIM also fails to prevent spam and spoofing because a bad actor can very easily just sign messages using his own key and publish it on his own domain.</p>
+
+<p>But like SPF, it&rsquo;s a tool in the toolbox. It makes it easier to track, and it has another benefit in that it guarantees the message integrity – the message you receive cannot have been modified by anyone else along the way.</p>
+
+<h1 id="spam-vs-spoofing">Spam vs Spoofing</h1>
+
+<p>So SPF and DKIM are two methods that help validate <em>who</em> sent a message and verifies the <em>who</em> sent from a place they&rsquo;re allowed to. This enables a kind of paper trail and tracking that would not otherwise be possible.</p>
+
+<p>These technologies help email providers handle bad email because they make bad emails trackable. A bad actor needs to buy a domain and rent a server – and once someone figures it out, it can be banned very quickly. Additionally, brand new senders might be trusted less than senders that have online for years with a good track record.</p>
+
+<p>The so-called <em>reputation</em> of your domain and sending server is important. For example, if Gmail detects a bunch of its users sending messages from your server to spam, then it might start to filter your messages more aggressively.</p>
+
+<p>So SPF and DKIM can help with spam, but as we&rsquo;ve seen, it does nothing to help with spoofing. A bad actor can very trivially buy a domain and configure SPF/DKIM, and send you an email with any <code>From:</code> address.</p>
+
+<p>In practice, many email providers have special heuristics to detect spoofed messages. A lot of email providers might apply more stringent filtering to messages from a bank, for example.</p>
+
+<h1 id="domain-alignment-with-dmarc">Domain Alignment with DMARC</h1>
+
+<p>The main point is SPF and DKIM don&rsquo;t address the problem of spoofing. As an end-user who gets an email into your inbox, you don&rsquo;t know if the <code>From:</code> address you&rsquo;re actually <em>seeing</em> is legit or not.</p>
+
+<p>Well, that&rsquo;s not entirely true. In some email clients, including Gmail, if the <code>MAIL FROM</code> doesn&rsquo;t match the <code>From:</code> address, you&rsquo;ll see a &ldquo;via&rdquo; tag. For example, <code>From contact@your-bank.com via bad-actor.com</code>. This does make things a bit more visible, but it&rsquo;s a hack to workaround a failure in the protocol.</p>
+
+<p>That&rsquo;s where DMARC comes in. DMARC is a protocol that ensures the <code>From:</code> address is valid by specifying that the domain used in the SPF or DKIM validation step <em>aligns</em> with the From address.</p>
+
+<p>DMARC requires SPF <em>or</em> DKIM to pass domain alignment. So at least one of these must exist and pass, and at least one must be aligned.</p>
+
+<ul>
+<li>For SPF, domain alignment passes if the <code>MAIL FROM</code> domain matches the <code>From:</code> domain. For example, <code>MAIL FROM: &lt;bounce-detect@example.com&gt;</code> is aligned with <code>From: &lt;john@example&gt;</code>.</li>
+<li>For DKIM, domain alignment passes of the DKIM domain (d) is the same as the <code>From:</code>.</li>
+</ul>
+
+<p>Every administrator can publish a DMARC policy in DNS that tells receiving email servers what to do when domain alignment fails. Increasingly, the policy is to <em>quarantine</em> (aka send to spam) messages that fail domain alignment.</p>
+
+<h1 id="bottom-line-use-all-three">Bottom line – use all three!</h1>
+
+<p>The bottom line is you need to use SPF, DKIM, <em>and</em> DMARC if you want to secure your domain from spoofers and spammers.</p>
+
+  </div>
+</div>
+
+      <footer>
+        <hr>
+        <small>
+          &copy; 2019 
+        </small>
+      </footer>
+    </div> 
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    var clicky_site_ids = clicky_site_ids || [];
+    clicky_site_ids.push(101151077);
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//static.getclicky.com/js';
+      ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+    })();
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101151077ns.gif" /></p></noscript>
+  </body>
+</html>
+

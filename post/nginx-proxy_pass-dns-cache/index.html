@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
+
+        <title>Nginx proxy_pass DNS Cache</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+
+          
+          <span class="navbar-brand mb-0 h1"></span>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation" name="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link " href="/">Home</a>
+              <a class="nav-item nav-link" href="https://github.com/chroder" target="_blank">GitHub</a>
+              
+              <a class="nav-item nav-link " href="/about/">About</a>
+            </div>
+          </div>
+        </nav>
+
+        <section id="page-title">
+          <h1><a href="/">Christopher Nadeau</a></h1>
+          <span id="author-name">
+            <h6><a href="/about/"></a></h6>
+          </span>
+        </section>
+
+
+<div class="blog-post">
+  <h1>Nginx proxy_pass DNS Cache</h1>
+  <div class="blog-post-subheader">
+    <time>31 Mar 2017</time>
+  </div>
+  <div class="blog-post-content">
+    
+
+<p>We use nginx to proxy to an Amazon S3 bucket to serve static content to customers. Yesterday, I noticed a high failure rate through the proxy but I couldn&rsquo;t figure out why.</p>
+
+<p>After some debugging, I finally discovered that the IP address nginx was hitting was different from the one that DNS was returning. It turns out that nginx resolves hostnames only once on load, meaning whatever IP address it got on load would stick around until reload.</p>
+
+<p>So Amazon updated DNS for the S3 endpoint for our bucket but we were still using the old one (which was apparently failing).</p>
+
+<h2 id="dynamic-proxy-pass">Dynamic <code>proxy_pass</code></h2>
+
+<p>Here&rsquo;s how the directive might look:</p>
+
+<pre><code>server {
+  listen 80;
+  server_name files.example.com;
+
+  location / {
+    proxy_pass http://example.s3.amazonaws.com;
+  }
+}
+</code></pre>
+
+<p>The <a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass">documentation for <code>proxy_pass</code></a> has this little gem:</p>
+
+<blockquote>
+<p>In some cases, the part of a request URI to be replaced cannot be determined:</p>
+
+<p>[&hellip;]</p>
+
+<p>A server name, its port and the passed URI can also be specified using variables:</p>
+
+<p>[&hellip;]</p>
+
+<p>In this case, the server name is searched among the described server groups, and, if not found, is determined using a resolver.</p>
+</blockquote>
+
+<p>Meaning if we change <code>proxy_pass</code> to use a variable instead, then nginx will be forced to resolve it using a resolver which will work how we want (i.e. DNS TTLs will work).</p>
+
+<p>Here&rsquo;s what the &ldquo;fixed&rdquo; block looks like:</p>
+
+<pre><code>server {
+  listen 80;
+  server_name files.example.com;
+
+  // or use whatever resolver your machine is set to use
+  resolver 8.8.8.8;
+
+  set $proxy_pass_url http://example.s3.amazonaws.com;
+
+  location / {
+    proxy_pass $proxy_pass_url;
+  }
+}
+</code></pre>
+
+  </div>
+</div>
+
+      <footer>
+        <hr>
+        <small>
+          &copy; 2019 
+        </small>
+      </footer>
+    </div> 
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    var clicky_site_ids = clicky_site_ids || [];
+    clicky_site_ids.push(101151077);
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//static.getclicky.com/js';
+      ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+    })();
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101151077ns.gif" /></p></noscript>
+  </body>
+</html>
+

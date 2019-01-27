@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
+
+        <title>Quickie: Prevent Mac apps from quitting when last window is closed</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+
+          
+          <span class="navbar-brand mb-0 h1"></span>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation" name="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link " href="/">Home</a>
+              <a class="nav-item nav-link" href="https://github.com/chroder" target="_blank">GitHub</a>
+              
+              <a class="nav-item nav-link " href="/about/">About</a>
+            </div>
+          </div>
+        </nav>
+
+        <section id="page-title">
+          <h1><a href="/">Christopher Nadeau</a></h1>
+          <span id="author-name">
+            <h6><a href="/about/"></a></h6>
+          </span>
+        </section>
+
+
+<div class="blog-post">
+  <h1>Quickie: Prevent Mac apps from quitting when last window is closed</h1>
+  <div class="blog-post-subheader">
+    <time>03 Mar 2016</time>
+  </div>
+  <div class="blog-post-content">
+    <p>There are a few apps on OSX that quit/terminate once their window is closed. This is typical on Windows of course, but it&rsquo;s a bit random on OSX. Some (most?) apps stay open, and some close. I find it really bloody annoying. I&rsquo;ll quit my apps when I&rsquo;m ready to quit them, thank you very much.</p>
+
+<p>The biggest sore spot with me is <a href="https://agilebits.com/onepassword">1password</a> which I use dozens of times a day, and every time I <code>CMD+W</code> to close the window (muscle memory!), it quits the app. Re-opening it takes about 2 seconds. It doesn&rsquo;t seem like much, but it&rsquo;s annoying when I use it so often.</p>
+
+<p>The way I found to &ldquo;solve&rdquo; this problem is to use <a href="https://www.keyboardmaestro.com/main/">Keyboard Maestro</a> to intercept <code>CMD+W</code> keys and instead execute a <code>CMD+H</code> to hide instead.</p>
+
+<p>First step is to create a new Group so you can apply a macro to specific apps:</p>
+
+<p><img src="/content/images/2016/03/Screenshot-2016-03-03-10-24-08.png" alt="Close to hide group" /></p>
+
+<p>Then create a macro:</p>
+
+<ul>
+<li>Trigger: <em>This hot key:</em> <code>CMD+W</code></li>
+<li>Actions:
+
+<ul>
+<li><em>Simulate Keystroke:</em> <code>CMD+H</code></li>
+</ul></li>
+</ul>
+
+<p><img src="/content/images/2016/03/Screenshot-2016-03-03-10-26-15.png" alt="Close to hide macro" /></p>
+
+<p>Easy-peasy.</p>
+
+  </div>
+</div>
+
+      <footer>
+        <hr>
+        <small>
+          &copy; 2019 
+        </small>
+      </footer>
+    </div> 
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    var clicky_site_ids = clicky_site_ids || [];
+    clicky_site_ids.push(101151077);
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//static.getclicky.com/js';
+      ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+    })();
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101151077ns.gif" /></p></noscript>
+  </body>
+</html>
+

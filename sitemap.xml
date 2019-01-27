@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://nadeau.tv/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</loc>
+    <lastmod>2018-11-08T15:54:31+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/configure-hyper-key-osx/</loc>
+    <lastmod>2018-08-28T12:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/nginx-proxy_pass-dns-cache/</loc>
+    <lastmod>2017-03-31T10:00:12+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</loc>
+    <lastmod>2016-06-16T16:11:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</loc>
+    <lastmod>2016-03-03T10:29:18+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/quickie-quickly-rename-mysql-database/</loc>
+    <lastmod>2016-03-02T17:42:43+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/ssh-with-a-bastion-host/</loc>
+    <lastmod>2016-02-27T13:33:16+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/aws-vpc-network-structure/</loc>
+    <lastmod>2016-02-27T13:32:41+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/</loc>
+    <lastmod>2016-01-27T18:16:45+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/about/</loc>
+    <lastmod>2016-01-17T13:27:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</loc>
+    <lastmod>2014-02-01T15:38:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/ditching-google/</loc>
+    <lastmod>2014-02-01T15:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/angularjs/</loc>
+    <lastmod>2014-02-01T15:38:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/angularjs/</loc>
+    <lastmod>2014-02-01T15:38:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/aws/</loc>
+    <lastmod>2016-02-27T13:32:41+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/aws/</loc>
+    <lastmod>2016-02-27T13:32:41+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/</loc>
+    <lastmod>2014-02-01T15:38:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/</loc>
+    <lastmod>2018-11-08T15:54:31+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/devops/</loc>
+    <lastmod>2016-06-16T16:11:04+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/devops/</loc>
+    <lastmod>2016-06-16T16:11:04+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/javascript/</loc>
+    <lastmod>2014-02-01T15:38:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/javascript/</loc>
+    <lastmod>2014-02-01T15:38:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/mac/</loc>
+    <lastmod>2016-03-03T10:29:18+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/mac/</loc>
+    <lastmod>2016-03-03T10:29:18+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/mysql/</loc>
+    <lastmod>2016-06-16T16:11:04+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/mysql/</loc>
+    <lastmod>2016-06-16T16:11:04+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/post/</loc>
+    <lastmod>2018-11-08T15:54:31+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/productivity/</loc>
+    <lastmod>2018-08-28T12:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/productivity/</loc>
+    <lastmod>2018-08-28T12:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/products/</loc>
+    <lastmod>2014-02-01T15:05:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/products/</loc>
+    <lastmod>2014-02-01T15:05:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/quickie/</loc>
+    <lastmod>2016-03-03T10:29:18+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/quickie/</loc>
+    <lastmod>2016-03-03T10:29:18+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/security/</loc>
+    <lastmod>2016-02-27T13:33:16+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/categories/security/</loc>
+    <lastmod>2016-02-27T13:33:16+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://nadeau.tv/tags/</loc>
+    <lastmod>2014-02-01T15:38:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

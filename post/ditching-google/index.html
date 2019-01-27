@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
+
+        <title>Ditching Google</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+
+          
+          <span class="navbar-brand mb-0 h1"></span>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation" name="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link " href="/">Home</a>
+              <a class="nav-item nav-link" href="https://github.com/chroder" target="_blank">GitHub</a>
+              
+              <a class="nav-item nav-link " href="/about/">About</a>
+            </div>
+          </div>
+        </nav>
+
+        <section id="page-title">
+          <h1><a href="/">Christopher Nadeau</a></h1>
+          <span id="author-name">
+            <h6><a href="/about/"></a></h6>
+          </span>
+        </section>
+
+
+<div class="blog-post">
+  <h1>Ditching Google</h1>
+  <div class="blog-post-subheader">
+    <time>01 Feb 2014</time>
+  </div>
+  <div class="blog-post-content">
+    
+
+<p>Over the years, there have been so many blog posts determined to convince us that Google is becoming evil. This isn&rsquo;t one of those kinds of rants. I don&rsquo;t really mind Google as a company. I love my Nexus 5, I still use Google search and I love Google Chrome. I think they do some pretty stupid stuff from time to time (more on this below), but I don&rsquo;t think they&rsquo;re fundamentally an evil company and my moving away from them isn&rsquo;t some kind of political statement.</p>
+
+<hr />
+
+<p>So why did I move away?</p>
+
+<h4 id="gmail-sucks">Gmail Sucks</h4>
+
+<p>Gmail is not very good. It <em>was</em> good in 2005 by simple fact that everything else was so terrible. But as time passes, Gmail becomes worse and worse while other services get better.</p>
+
+<p>Let&rsquo;s start with the Gmail interface. It&rsquo;s <em>slow</em>, it&rsquo;s ugly and it&rsquo;s very limited. It&rsquo;s unfortunate because the web interface is basically the only sane way to use Gmail without using specialised email clients like Sparrow (which is now dead after being bought by Google) or the Gmail app for Android.</p>
+
+<p>Using Gmail from any other type of standard IMAP client is a mess due to the special logic behind things like labels and deleting/archiving. The way Gmail implements labels means I get duplciate messages all over the place, and the way Gmail interprets &ldquo;deleting&rdquo; to mean &ldquo;archiving&rdquo; means my archive gets filled with stuff I really don&rsquo;t want to archive.</p>
+
+<p>(The whole delete v archive issue might matter more to me than it does to the average person. I get a <em>lot</em> of bullshit email that I just <em>do not</em> want to keep forever. I love the idea of the archive, but I want my archive to be things I actually want to keep.)</p>
+
+<p>I accept that using an IMAP email client isn&rsquo;t going to deliver the best experience for Gmail. That leaves us with the web interface which isn&rsquo;t great either. I mentioned a few reasons already, but perhaps a more important negative to the web interface is that you are held hostage to the whims of Google. (How do you like that new composer window?).</p>
+
+<p>This is all just a long winded way of explaining that I don&rsquo;t really like Gmail to begin with, and combine that with my utter lack of confidence that Google can keep it usable, it seems silly to host something so important with them. My underlying fear is that I can&rsquo;t know if they&rsquo;ll get another bright idea like linking YouTube comments to Google Plus.</p>
+
+<h4 id="google-is-gmail-but-gmail-sucks">Google is Gmail (but Gmail sucks)</h4>
+
+<p>My displeasure with Gmail and lack of trust with Google is the core reason I started searching for alternatives. I wanted out of the vendor lock-in, especially given their core product wasn&rsquo;t even any good.</p>
+
+<p>So here are the services I&rsquo;ve replaced:</p>
+
+<ul>
+<li>Gmail</li>
+<li>Personal Calendar</li>
+<li>Contacts</li>
+<li>Google Drive</li>
+<li>Google Authenticator</li>
+<li>Bookmarks (from Google Chrome)</li>
+</ul>
+
+<h2 id="replacing-gmail-with-fastmail">Replacing Gmail with FastMail</h2>
+
+<ul>
+<li>Website: <a href="https://www.fastmail.fm/">https://www.fastmail.fm/</a></li>
+<li>Price: $40/year (other plans available)</li>
+</ul>
+
+<p>Email was the core of my ambition to leave Google and finding a replacement was the highest priority. I looked at dozens of providers before settling on FastMail for it&rsquo;s conbination of price and excellent set of features.</p>
+
+<h3 id="switching-to-fastmail">Switching to FastMail</h3>
+
+<p>Switching to FM was easy:</p>
+
+<ol>
+<li>In Gmail, I set up email forwarding to my new FastMail account</li>
+<li>In FastMail, I added my Gmail account to &ldquo;Accounts&rdquo; (in Settings).</li>
+<li>FM has a &ldquo;Migrate IMAP&rdquo; feature which imported all of my old Gmail emails into my FastMail account.</li>
+</ol>
+
+<p>That was it. New email was being forwarded into my new FM account, and I could still send outgoing mail from my old Gmail account from within FM itself (and it uses Gmail&rsquo;s SMTP servers so there&rsquo;s no issue with spam or &ldquo;on behalf of&rdquo; nonsense).</p>
+
+<h3 id="fastmail-web-interface">FastMail Web Interface</h3>
+
+<p>Coming from Gmail, I came into FM expecting to hate the web interface. I was pro-email client. But actually using FM&rsquo;s web interface changed my mind. It is <em>blazingly</em> fast and has a pleasant, intuitive design that gets out of your way.</p>
+
+<p>I use a Mac and I built a site-specific app using <a href="http://fluidapp.com/">Fluid</a>.</p>
+
+<p>FastMail sits in my dock, and using a clever userscript, I get number badges and Growl notifications as well:</p>
+
+<div class="load-gist" data-gist-url="https://gist.github.com/chroder/8aec68ab898a48a10218"><a href="https://gist.github.com/chroder/8aec68ab898a48a10218">fluidapp.fastmail.js</a></div>
+
+<h3 id="using-fastmail">Using FastMail</h3>
+
+<p>FastMail does email really really well. It&rsquo;s <em>blazing fast</em> and there are no surprises, stuff just works. Exactly what I want when it comes to email.</p>
+
+<p>It does everything you&rsquo;d expect from a modern email service, but let&rsquo;s get specific:</p>
+
+<ul>
+<li>Incoming and outgoing email (obviously)</li>
+<li>Archiving</li>
+<li>Search</li>
+<li>Spam filter</li>
+<li>Service-side rules/filters (that is, filters that run on the FastMail side rather than just your client)</li>
+</ul>
+
+<p>&hellip; and lots more.</p>
+
+<h4 id="features">Features</h4>
+
+<h5 id="personalities">Personalities</h5>
+
+<p>Aka aliases aka &ldquo;send email from another address&rdquo;. If you&rsquo;re like me you&rsquo;ve accumulated lots of different email accounts over the years. I&rsquo;ve got personal addresses, emails from domain names I own, and of course my old Gmail address.</p>
+
+<p>The most important thing here is that you can define the SMTP server to use for each of your personalities. So my old Gmail email still goes through smtp.gmail.com.</p>
+
+<h5 id="virtual-domains">Virtual Domains</h5>
+
+<p>You can use any of your own personal domains with FastMail. Add a virtual domain with FastMail, then set up addresses you want at that domain and the target mailbox mail should be delievered to.</p>
+
+<p>This is similar to any old email forwarding service (like you can probably get from your DNS host) except it also allows you to <em>send</em> mail from these accounts as well. FastMail even supports DKIM signing keys.</p>
+
+<h5 id="aliases">Aliases</h5>
+
+<p>In addition to creating email addresses on your own virtual domains, you can also create any number of aliases using FastMail domains (of which there are over a hundred). I have a few I use when I suspect my email address is going into some spam distribution list!</p>
+
+<p>You can also use &ldquo;plus&rdquo; addressing you&rsquo;re probably used to from Gmail (username+myalias@fastmail.fm), but even better is subdomain aliasing. It works in the same way except in the format of myalias@username.fastmail.fm. If you have a folder with the same name as the alias, FastMail automatically sorts into that folder.</p>
+
+<h5 id="spam-filter">Spam Filter</h5>
+
+<p>FastMail has a spam filter but it&rsquo;s per-account, and learns from what mark as spam. In other words, it&rsquo;s just like the beyesian filter you&rsquo;d set up in an email client.</p>
+
+<p>This is both good and bad. Good in that you train the filter specifically to your own needs, but bad in that it doesn&rsquo;t have every single Gmail user contirbuting to it. As much as I dislike Gmail, I can&rsquo;t knock it&rsquo;s spam-catching abilities. Gmail&rsquo;s spam filter is phenominal. The FastMail spam filter is as good as I expect a typical spam filter to be, but not better.</p>
+
+<p>With that said, I don&rsquo;t actually get a lot of spam in my inbox. I&rsquo;m just saying that the one or two that make it past the FastMail filter would have been caught by the Gmail filter.</p>
+
+<h5 id="alternative-logins">Alternative Logins</h5>
+
+<p>FastMail doesn&rsquo;t let you enforce two-factor authentication for some reason. But it does allow you to create alternative passwords that have extra security. You can use Google Authenticator, Yubikey, you can create one-time passwords or passwords that are SMS&rsquo;ed to your phone&ndash;a lot of options.</p>
+
+<p>For the security concious what you can do is set a ridiculously long password as your main account password, and then create a new Google Authenticator password that you use day-to-day. And using this same alternative logins system you can create app-specific passwords.</p>
+
+<h4 id="fastmail-negatives">FastMail Negatives</h4>
+
+<p>For all the love I have for FM, there are a few negatives.</p>
+
+<h5 id="email-client-on-android">Email client on Android</h5>
+
+<p>The email clients available for Android aren&rsquo;t very good. Where thy aren&rsquo;t hideously ugly and hard to use, they&rsquo;re missing features. And where they have great features, they&rsquo;re hideously ugly.</p>
+
+<p>I can hardly blame FM for lack of email clients on Android, but given how great the Gmail app for Android is, it&rsquo;s a fair comparison. FM does have a wicked mobile interface that works really well, but it&rsquo;s not the same (e.g., no offline mode, no notifications etc).</p>
+
+<p>I&rsquo;ve learned to live with <a href="http://www.aqua-mail.com/">AquaMail</a>. It&rsquo;s got loads of features and since FM is standard IMAP it works perfectly. But it is not a pretty app.</p>
+
+<h5 id="useless-features-notes-and-files">Useless features: Notes and Files</h5>
+
+<p>FM has a Notes feature which I find pretty useless. It does exactly what you expect but it offers no compelling features over whatever you&rsquo;re already using and since it lives inside of the FM web interface, you can&rsquo;t use them anywhere else (e.g., no syncing to mobile etc). I suspect it&rsquo;s just one of those features that was added somewhere along the line and has been largely forgotten.</p>
+
+<p>The other feature, Files, is much the same. Your account has a certain file storage limit (5GB in my case) which is completely separate from email and email attachments. But again, it doesn&rsquo;t do any kind of sync and is largely useless.</p>
+
+<h5 id="address-book">Address Book</h5>
+
+<p>FM does have an address book but it doesn&rsquo;t sync. Well, that&rsquo;s half true. You can set up read-only access to the FM address book via LDAP, but without write support even that isn&rsquo;t very useful.</p>
+
+<p>So in todays world of multiple computers and mobile phones, an address book that doesn&rsquo;t sync means it&rsquo;s pretty useless.</p>
+
+<h2 id="replace-personal-calendar-and-contacts-with-fruux">Replace Personal Calendar and Contacts with Fruux</h2>
+
+<ul>
+<li>Website: <a href="http://fruux.com/">http://fruux.com/</a></li>
+<li>Price: Free or €40/year (about $50) for &ldquo;Pro&rdquo;</li>
+</ul>
+
+<p>Fruux is a simple service that hosts your address book and calendars and syncs through standard CalDAV and CardDAV to all of your devices. (Android doesn&rsquo;t natively support CardDAV so go ahead and grab the free <a href="https://play.google.com/store/apps/details?id=com.fruux.android&amp;hl=en">Fruux app</a> for that).</p>
+
+<p>Not much to say about Fruux. It&rsquo;s simple and it works with all my devices.</p>
+
+<h2 id="replace-google-drive-with-dropbox">Replace Google Drive with Dropbox</h2>
+
+<ul>
+<li>Website: <a href="https://www.dropbox.com/">https://www.dropbox.com/</a></li>
+<li>Price: Free or $99/year for Pro</li>
+</ul>
+
+<p>Who doesn&rsquo;t know about dropbox?</p>
+
+<h2 id="replace-google-authenticator-with-authy">Replace Google Authenticator with Authy</h2>
+
+<ul>
+<li>Website: <a href="https://www.authy.com/">https://www.authy.com/</a></li>
+<li>Price: Free</li>
+</ul>
+
+<p>There&rsquo;s nothing inherently wrong with Google Authenticator. I was just paranoid about what would happen if I lost my phone or if it got stolen. Authy works mostly just like Google Authenticator but also includes a backup/restore feature.</p>
+
+<h2 id="replacing-chrome-bookmarks-with-pinboard">Replacing Chrome Bookmarks with Pinboard</h2>
+
+<ul>
+<li>Website: <a href="https://pinboard.in/">https://pinboard.in/</a></li>
+<li>Price: One-time fee of $10.31 or $25/year for the &ldquo;archival account&rdquo;</li>
+</ul>
+
+<p>Pinboard is like a simple, <em>fast</em>, ad-free delicious.</p>
+
+<p>On my Mac, I use an app called <a href="http://aki-null.net/shiori/">Shiori</a> attachd to a keyboard shortcut to quickly add or find bookmarks. If that&rsquo;s not your style, there are plugins for all major browsers or you can just use the web interface (which is, as I mentioned, <em>fast</em>).</p>
+
+<p>On Android I use an app called <a href="https://code.google.com/p/pindroid/">PinDroid</a>.</p>
+
+<h2 id="life-after-google">Life after Google</h2>
+
+<p>I still use Google services almost every day, so the title of this post is a bit exaggerated. I still use Google Search for most of my web searches, and I use Google Maps whenever I need to travel anywhere not a stones-throw away from a Circle Line station. But I&rsquo;m not invested in the entire Google ecosystem like I was before.</p>
+
+<p>I feel much better knowing my important information is no longer tied up in Google. I feel better being a <em>customer</em>. I like paying for services I use. I like not seeing ads. I like being able to speak to a human being if I run into a problem.</p>
+
+<p>So all in all, life after Google has been great.</p>
+
+  </div>
+</div>
+
+      <footer>
+        <hr>
+        <small>
+          &copy; 2019 
+        </small>
+      </footer>
+    </div> 
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    var clicky_site_ids = clicky_site_ids || [];
+    clicky_site_ids.push(101151077);
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//static.getclicky.com/js';
+      ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+    })();
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101151077ns.gif" /></p></noscript>
+  </body>
+</html>
+

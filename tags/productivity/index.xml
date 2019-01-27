@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Productivity on Christopher Nadeau</title>
+    <link>https://nadeau.tv/tags/productivity/</link>
+    <description>Recent content in Productivity on Christopher Nadeau</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 28 Aug 2018 12:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://nadeau.tv/tags/productivity/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Configure a Hyper Key on OSX</title>
+      <link>https://nadeau.tv/post/configure-hyper-key-osx/</link>
+      <pubDate>Tue, 28 Aug 2018 12:00:00 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/configure-hyper-key-osx/</guid>
+      <description>If you&amp;rsquo;re anything like me, you like keyboard shortcuts. I like to set up custom shortcuts and macros to automate everything I can. The problem is that the most convenient keyboard combinations are already in use by the OS or by user applications.
+That&amp;rsquo;s where the Hyper Key (also sometimes called a Super Key) comes in. Basically: Get rid of the useless caps-lock key and turn it into a new modifier key that isn&amp;rsquo;t used by anything else.</description>
+    </item>
+    
+    <item>
+      <title>Quickie: Prevent Mac apps from quitting when last window is closed</title>
+      <link>https://nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</link>
+      <pubDate>Thu, 03 Mar 2016 10:29:18 +0000</pubDate>
+      
+      <guid>https://nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</guid>
+      <description>There are a few apps on OSX that quit/terminate once their window is closed. This is typical on Windows of course, but it&amp;rsquo;s a bit random on OSX. Some (most?) apps stay open, and some close. I find it really bloody annoying. I&amp;rsquo;ll quit my apps when I&amp;rsquo;m ready to quit them, thank you very much.
+The biggest sore spot with me is 1password which I use dozens of times a day, and every time I CMD+W to close the window (muscle memory!</description>
+    </item>
+    
+  </channel>
+</rss>

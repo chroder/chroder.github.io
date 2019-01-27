@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
+
+        <title>pt-online-schema-change error &#34;Error creating new table ... duplicate key&#34;</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+
+          
+          <span class="navbar-brand mb-0 h1"></span>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation" name="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link " href="/">Home</a>
+              <a class="nav-item nav-link" href="https://github.com/chroder" target="_blank">GitHub</a>
+              
+              <a class="nav-item nav-link " href="/about/">About</a>
+            </div>
+          </div>
+        </nav>
+
+        <section id="page-title">
+          <h1><a href="/">Christopher Nadeau</a></h1>
+          <span id="author-name">
+            <h6><a href="/about/"></a></h6>
+          </span>
+        </section>
+
+
+<div class="blog-post">
+  <h1>pt-online-schema-change error &#34;Error creating new table ... duplicate key&#34;</h1>
+  <div class="blog-post-subheader">
+    <time>16 Jun 2016</time>
+  </div>
+  <div class="blog-post-content">
+    
+
+<p><code>pt-online-schema-change</code> is a tool in the <a href="https://www.percona.com/doc/percona-toolkit/2.2/index.html">Percona Toolkit</a> which allows you to make large table alters without locking the database.</p>
+
+<p>Newer versions of MySQL have <a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-create-index-overview.html">Online DDL</a> which reduce the need for this tool. But if you&rsquo;re like us, <code>pt-online-schema-change</code> is still very valuable because we use Galera. Running a DDL query on a Galera cluster blocks the entire cluster (even other databases in the same cluster).</p>
+
+<p>I&rsquo;ve successfully used <code>pt-online-schema-change</code> in the past with great success. This week I tried to use it again to perform some expensive queries and I ran into an error message like this:</p>
+
+<pre><code>Error creating new table: DBD::mysql::db do failed: Can't write; duplicate key in table '_child_new'
+</code></pre>
+
+<p>A bit of Google-fu and I discovered it was linked to <a href="https://bugs.launchpad.net/percona-toolkit/+bug/1498128">this</a> bug.</p>
+
+<p>The bug is marked as fixed in version 2.2.17 &ndash; <strong>but it is not</strong>. If you need a truly fixed version, jump to the end of this post: <a href="#thefix">The Fix</a>.</p>
+
+<h3 id="briefly-how-the-tool-works">Briefly: How the tool works</h3>
+
+<p>To understand the bug, you need to understand a bit about how the tool actually works.</p>
+
+<p><code>pt-online-schema-change</code> creates a brand new table, applies your ALTER query on the new table (which is &ldquo;fast&rdquo; because it&rsquo;s empty), and then proceeds to copy records from the old table to the new table in chunks. It installs triggers on the old table to handle deletes and updates. Basically, you&rsquo;re syncing the two tables together.</p>
+
+<p>When the new table is synced with the old table, the tool switches them: The old table is dropped and the new table is renamed to the real table name.</p>
+
+<p><strong>The Problem: Foreign Keys</strong></p>
+
+<p>The problem is foreign keys. The FK needs to exist simultaneously in the old table and the new table, but FK names must be <em>unique</em> across the entire database.</p>
+
+<p>To work around this, <code>pt-online-schema-change</code> prefixes the FK&rsquo;s with an underscore in the new table. Example:</p>
+
+<ul>
+<li>Original FK: <code>MY_FK</code></li>
+<li>New FK: <code>_MY_FK</code></li>
+</ul>
+
+<p>Then when the tables are swapped, you&rsquo;re still left with that prefixed FK in the production table.</p>
+
+<p>Run the tool a second time? Well, once upon a time, you&rsquo;d just end up with a double-prefixed FK. So the second time, you&rsquo;d have <code>__MY_FK</code>. The third time, you&rsquo;d have <code>___MY_FK</code>&hellip; etc.</p>
+
+<p>The issue is that the maximum length of a FK is 64 characters. Imagine a schema changing many times over the course of a few years, you can easily breach this limit.</p>
+
+<p>So Percona patched the tool so it would detect if there was a FK with an underscore, and switch to <em>stripping</em> the underscore. In other words, they wanted it to alternate: <code>MY_FK</code> to <code>_MY_FK</code>, then back to <code>MY_FK</code> again if you ran it again.</p>
+
+<p><strong>The Bug</strong></p>
+
+<p>The bug is that the original patch checked for <em>any</em> FK with underscores. Meaning, if you had <code>_MY_FK</code> and <code>MY_OTHER_FK</code>, it would detect the underscore on the first one and assume that it needed to strip FKs. Of course, there is no underscore on the second, so it would be a no-op.</p>
+
+<ul>
+<li>Originals: <code>_MY_FK</code>, <code>MY_OTHER_FK</code></li>
+<li>New FKs: <code>MY_FK</code>, <code>MY_OTHER_FK</code></li>
+</ul>
+
+<p>As you see, a new table would attempt to create a FK with a name that already exists. <em>And that is the error.</em></p>
+
+<h2 id="the-fix">The Fix</h2>
+
+<p>Peter Dolberg, the op of the <a href="https://bugs.launchpad.net/percona-toolkit/+bug/1498128">bug report</a>, supplied a suggested patch. Despite the bug being marked as fixed in 2.2.17, it is not. What I ended up doing is copying the source, patching it myself, and then I just used the patched version:</p>
+
+<p>1) Install percona-toolkit the usual way.</p>
+
+<p>2) Copy the source of the <code>pt-online-schema-change</code> tool.</p>
+
+<pre><code>cp `which pt-online-schema-change` my-pt-osc
+</code></pre>
+
+<p>3) Patch it according to Peter&rsquo;s instructions. I took the liberty of creating a patch file:</p>
+
+<script src="https://gist.github.com/chroder/18474448f7a08e0deb7de01055294010.js"></script>
+
+  </div>
+</div>
+
+      <footer>
+        <hr>
+        <small>
+          &copy; 2019 
+        </small>
+      </footer>
+    </div> 
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    var clicky_site_ids = clicky_site_ids || [];
+    clicky_site_ids.push(101151077);
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//static.getclicky.com/js';
+      ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+    })();
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101151077ns.gif" /></p></noscript>
+  </body>
+</html>
+

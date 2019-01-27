@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
+
+        <title>Using NgModelController with Custom Directives</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+
+          
+          <span class="navbar-brand mb-0 h1"></span>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation" name="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link " href="/">Home</a>
+              <a class="nav-item nav-link" href="https://github.com/chroder" target="_blank">GitHub</a>
+              
+              <a class="nav-item nav-link " href="/about/">About</a>
+            </div>
+          </div>
+        </nav>
+
+        <section id="page-title">
+          <h1><a href="/">Christopher Nadeau</a></h1>
+          <span id="author-name">
+            <h6><a href="/about/"></a></h6>
+          </span>
+        </section>
+
+
+<div class="blog-post">
+  <h1>Using NgModelController with Custom Directives</h1>
+  <div class="blog-post-subheader">
+    <time>01 Feb 2014</time>
+  </div>
+  <div class="blog-post-content">
+    
+
+<p>Creating directives with AngularJS is <a href="http://docs.angularjs.org/guide/directive">fairly straightforward</a>. But most directives also need to interact with a model which represents their state. You could bake in your own custom model handling, but you can also plug right in to AngularJS&rsquo;s own <a href="http://docs.angularjs.org/api/ng.directive:ngModel.NgModelController">NgModelController</a> &ndash; the same <code>ng-model</code> that is used for things like input boxes and select menus.</p>
+
+<hr />
+
+<h2 id="example-directive-time-duration">Example directive: <code>&lt;time-duration /&gt;</code></h2>
+
+<p>As a simple example, let&rsquo;s build a directive where the user can input a duration using one of many possible units of time.</p>
+
+<pre><code class="language-html">&lt;h3&gt;My Super App&lt;/h3&gt;
+How often should we email you?
+&lt;time-duration ng-mode=&quot;email_notify_pref&quot; /&gt;
+</code></pre>
+
+<p>Our directive will render as two input fields:</p>
+
+<ul>
+<li>A text box where the user can enter a number</li>
+<li>A select box where the user selects a unit of time</li>
+</ul>
+
+<h3 id="the-model">The model</h3>
+
+<p>Our backend model will store the users input in seconds. When rendering the model, we will always render the value to the largest unit of time. For example, if our model value is 3600 seconds then we&rsquo;ll show that as &ldquo;1 hour&rdquo;.</p>
+
+<p>I chose this example directive so we can explore the way Angular stores model values and how parsers and formatters work. Our real model is always seconds, but the value displayed on screen is split into a unit of time selection and a numeric value. It means we have to handle converting from seconds to unit/value and back to seconds again.</p>
+
+<p>Once you understand how this basic workflow of parsers and formatters happen, you will be able to build all kinds of directives, even if they are backed by very complex models.</p>
+
+<h2 id="the-setup">The setup</h2>
+
+<p>Let&rsquo;s start by defining the directive:</p>
+
+<pre><code class="language-javascript">function TimeDurationDirective() {
+    var tpl = &quot;&lt;div&gt; \
+        &lt;input type='text' ng-model='num' size='80' /&gt; \
+        &lt;select ng-model='unit'&gt; \
+            &lt;option value='secs'&gt;Seconds&lt;/option&gt; \
+            &lt;option value='mins'&gt;Minutes&lt;/option&gt; \
+            &lt;option value='hours'&gt;Hours&lt;/option&gt; \
+            &lt;option value='days'&gt;Days&lt;/option&gt; \
+        &lt;/select&gt; \
+    &lt;/div&gt;&quot;;
+
+    return {
+        restrict: 'E',
+        template: tpl,
+        require: 'ngModel',
+        replace: true,
+        link: function(scope, iElement, iAttrs, ngModelCtrl) {
+            //TODO
+        }
+    };
+};
+
+angular.module('myModule').directive('timeDuration', TimeDurationDirective);
+</code></pre>
+
+<p>So far this is just a really simple directive that does nothing yet except render that HTML template which shows an input box (where the user inputs a numeric value) and a select box (where the user selects a unit of time).</p>
+
+<h3 id="require-ngmodel"><code>require: 'ngModel'</code></h3>
+
+<p>The only &ldquo;special&rdquo; bit about this directive is the <a href="http://docs.angularjs.org/api/ng.$compile#description_comprehensive-directive-api_directive-definition-object">require</a> property. The <code>require</code> property tells Angular that our directive requires the controller of another directive. In our case, we want to use the <code>ngModel</code> controller:</p>
+
+<pre><code class="language-html">&lt;time-duration ng-model=&quot;email_notify_pref&quot; /&gt;
+</code></pre>
+
+<p>When you require a controller, that controller is passed in to the <code>link</code> function as the final parameter (in the example above, it&rsquo;s <code>ngModelCtrl</code>). We are &ldquo;linking&rdquo; our timeDuration directive and the ngModel directive together.</p>
+
+<p>It&rsquo;s worth noting that <code>require</code> has two special syntax rules that may come in handy depending on the directive you are building:</p>
+
+<p><strong>Require a parent controller: <code>require: '^someController'</code></strong></p>
+
+<p>If you don&rsquo;t need the controller specified on your directive specifically, you can use the caret symbol that tells Angular to search up the DOM tree until it finds it. This is useful if you are creating a structure of related directives that work together. For example:</p>
+
+<pre><code class="language-xml">&lt;my-directive ng-model=&quot;myModel&quot;&gt;
+    &lt;other-directive&gt;&lt;/other-directive&gt;
+&lt;/my-directive&gt;
+</code></pre>
+
+<p>We could use <code>require: '^ngModel'</code> on <code>otherDirective</code> and it would grab the model controller of the parent element.</p>
+
+<p><strong>Optionally use a controller: <code>require: '?optionalController'</code></strong></p>
+
+<p>Use the question mark to tell Angular that you <em>can</em> use a controller but it&rsquo;s not required. Angular will try to find the controller, but if it can&rsquo;t, it&rsquo;ll just give you <code>null</code>.</p>
+
+<p><strong>Combined: <code>require: '?^optionalParentController'</code></strong></p>
+
+<p>Finally, you can combine these two modifier together to get an optional parent controller.</p>
+
+<h3 id="what-is-a-directive-what-is-a-controller">What is a directive? What is a controller?</h3>
+
+<p>You might be asking at this point: What <em>is</em> <code>ngModel</code>? What is <code>ng-model</code>? What is <code>NgModelController</code>!?</p>
+
+<p><code>ngModel</code> is the name of the directive, and <code>ng-model</code> is how that directive is referred to from HTML. And finally, <code>ngModelController</code> is the directive <em>controller</em>.</p>
+
+<p>The thing to understand here is that a directive itself is self-contained. To have a directive <em>do</em> something interesting aside from just UI (like affect state in your app), it needs to interact through controllers. Controllers are the communication channel into and out of your otherwise self-contained directive.</p>
+
+<p>So, most directives <em>have a</em> controller and/or <em>use a</em> controller of some other directive. Without a controller, your directive is purely presentational because without a controller, your directive can&rsquo;t affect any state or interact with any other directives.</p>
+
+<p>In our case, we are using the built-in <code>NgModelController</code> to handle setting/saving our model value. The <code>ng-model</code> directive itself does nothing (well, <a href="https://github.com/angular/angular.js/blob/v1.2.10/src/ng/directive/input.js#L1173">almost nothing</a>), it only exists for the controller <code>NgModelController</code>.</p>
+
+<p>When we <code>require: 'ngModel'</code>, we are really saying &ldquo;give me the controller for the directive ng-model&rdquo;.</p>
+
+<h3 id="working-with-ngmodelcontroller">Working with <code>NgModelController</code></h3>
+
+<p>We briefly covered the role of <code>NgModelController</code> but let&rsquo;s get a bit more specific and think it through a piece at a time.</p>
+
+<p>Before going further, let&rsquo;s refresh ourselves with what our link function looks like so far:</p>
+
+<pre><code class="language-javascript">link: function(scope, iElement, iAttrs, ngModelCtrl) {
+    //TODO
+}
+</code></pre>
+
+<p><code>scope</code> is the scope that is tied to our HTML template, <code>iElement</code> is the actual HTML DOM element, <code>iAttrs</code> are the attributes of the original directive HTML, and <code>ngModelCtrl</code> is an instance of the required <code>NgModelController</code>.</p>
+
+<p>Now let&rsquo;s talk about the kinds of data this directive needs to handle. There are four distinct values:</p>
+
+<ol>
+<li>The real value in the model itself that exists in your scope. For example, we might have our app set the value like this: <code>$scope.email_notify_pref = 3600;</code></li>
+<li>Then we have <code>ngModelCtrl.$modelValue</code> which is a <em>copy</em> of the real model.</li>
+<li>Then we have <code>ngModelCtrl.$viewValue</code> which is a copy of data used in the view.</li>
+<li>Finally, we have whatever <em>real</em> data that exists in the view. For example, the value in an HTML form, or maybe it&rsquo;s even something like an element&rsquo;s innerHTML, or maybe it&rsquo;s data we set on the directive scope.</li>
+</ol>
+
+<p><code>NgModelController</code>s job is to handle propogating the value back and forth through these four stages. For example, if you change the value in the form (#4) then we use <code>NgModelController</code> to make sure the real model (#1) is updated. Conversely, when we makde a change to the real model (#1), then we can use <code>NgModelController</code> to make sure the UI is updated as well (for example, a checkbox becomes checked or unchecked etc).</p>
+
+<h4 id="the-formatters-pipeline">The <code>$formatters</code> pipeline</h4>
+
+<p>The first piece of the puzzle is how to convert a real model value into a value our view can use. In our example, this means turning <code>3600</code> into <code>1 hour</code>.</p>
+
+<p>The first step is to decide on a data structure that our view (<code>ngModelCtrl.$viewValue</code>) will use. For us, that&rsquo;s pretty simple as it&rsquo;s dictated by our form in the HTML template. We have two fields: an input box for a number and a select box for a unit of time. The easiest way to store this is as an object with two properties. So, in your mind let&rsquo;s say <code>$viewValue</code> looks like this (this isn&rsquo;t relevant, working code yet. It&rsquo;s just to paint a picture in your mind):</p>
+
+<pre><code class="language-javascript">$viewValue = { num: 1, unit: &quot;hours&quot; };
+</code></pre>
+
+<p>So how do we make this a reality? <code>NgModelController</code> does this by passing the real model value through an array of <code>$formatters</code> which are just functions that take the model value and return a transformed view value. The value ultimately assigned to <code>$viewValue</code> is whatever the last return value is. (In most cases, you will probably only ever have a single formatter).</p>
+
+<p>Our link function becomes something like this:</p>
+
+<pre><code class="language-javascript">link: function(scope, iElement, iAttrs, ngModelCtrl) {
+
+    // Units of time
+    multiplierMap = {seconds: 1, minutes: 60, hours: 3600, days: 86400};
+    multiplierTypes = ['seconds', 'minutes', 'hours', 'days']
+
+    ngModelCtrl.$formatters.push(function(modelValue) {
+        var unit = 'minutes', num = 0, i, unitName;
+
+        modelValue = parseInt(modelValue || 0);
+
+        // Figure out the largest unit of time the model value
+        // fits into. For example, 3600 is 1 hour, but 1800 is 30 minutes.
+        for (i = multiplierTypes.length-1; i &gt;= 0; i--) {
+            unitName = multiplierTypes[i];
+            if (modelValue % multiplierMap[unitName] === 0) {
+                unit = unitName;
+                break;
+            }
+        }
+
+        if (modelValue) {
+            num = modelValue / multiplierMap[unit]
+        }
+
+        return {
+            unit: unit,
+            num:  num
+        };
+    });
+}
+</code></pre>
+
+<p>This is a bit long-winded just because of the simple boilerplate to perform the maths that turn a number like 3600 into &lsquo;1 hour&rsquo;. But you see how we add a function to the <code>$formatters</code> pipeline:</p>
+
+<pre><code class="language-javascript">ngModelCtrl.$formatters.push(function() {...});
+</code></pre>
+
+<p>And then within that formatter function, we have returned the value that eventually gets set on <code>$viewValue</code>:</p>
+
+<pre><code class="language-javascript">return {
+    unit: unit,
+    num:  num
+};
+</code></pre>
+
+<p>So right now the pipeline looks something like this:</p>
+
+<pre><code>$scope.email_notify_pref = 3600
+↓
+ngModelCtrl.$formatters(3600)
+↓
+$viewValue = { unit: 'hours', num: 1}
+</code></pre>
+
+<h4 id="updating-the-ui-to-reflect-viewvalue">Updating the UI to reflect <code>$viewValue</code></h4>
+
+<p>Now we need a way of rendering the value in <code>$viewValue</code> to the browser screen. This is done by implementing a <code>ngModelCtrl.$render</code>.</p>
+
+<p>In our case, we are using the directive scope in our template to bind values to the form. This means we can just update values on the scope. But if you weren&rsquo;t using the scope, you&rsquo;d do any kind of DOM updates here instead. For example, maybe you want to create some fancy directive that wraps a jQuery widget. You&rsquo;d need to do any jQuery calls in this render method.</p>
+
+<p>Here&rsquo;s our really simple render method assigning the view value to the scope variables we used in our HTML template:</p>
+
+<pre><code class="language-javascript">ngModelCtrl.$render = function() {
+    scope.unit = ngModelCtrl.$viewValue.unit;
+    scope.num  = ngModelCtrl.$viewValue.num;
+};
+</code></pre>
+
+<h4 id="the-parsers-pipeline">The <code>$parsers</code> Pipeline</h4>
+
+<p>In a similar way that we have the <code>$formatters</code> pipeline that converts a model value into the <code>$viewValue</code>, we have the <code>$parsers</code> pipeline that converts the <code>$viewValue</code> into the <code>$modelValue</code> (which eventually gets assigned back to the real model).</p>
+
+<p>We just push our custom function on to the pipeline:</p>
+
+<pre><code class="language-javascript">ngModelCtrl.$parsers.push(function(viewValue) {
+    var unit = viewValue.unit, num = viewValue.num, multiplier;
+
+    // Remember multiplierMap was defined above
+    // in the formatters snippet
+    multiplier = multiplierMap[unit];
+
+    return num * multiplier;
+});
+</code></pre>
+
+<p>Let&rsquo;s try to visual the pipeline again:</p>
+
+<pre><code>$viewValue.email_notify_pref = { unit: 'hours', num: 1 };
+↓
+ngModelCtrl.$parsers({unit: 'hours', num: 1})
+↓
+$modelValue = 3600;
+</code></pre>
+
+<h4 id="updating-viewvalue-when-the-ui-changes">Updating <code>$viewValue</code> when the UI changes</h4>
+
+<p>The last piece of the puzzle is to make sure we are updating <code>$viewValue</code> when the values in the UI change. We do this by executing <code>ngModelCtrl.$setViewValue()</code> when the value changes.</p>
+
+<p>How do we know when the value changes? That depends entirely on your directive. This is easy in our case because we are using bound variables on the directive scope so we can just set a watch like this:</p>
+
+<pre><code class="language-javascript">scope.$watch('unit + num', function() {
+    ngModelCtrl.$setViewValue({ unit: scope.unit, num: scope.num });
+});
+</code></pre>
+
+<p>But you can call this however you like. For example, maybe you are using jQuery and you want to listen for a change event on some select box:</p>
+
+<pre><code class="language-javascript">$(iElement).find('select').on('change', function() {
+    ngModelCtrl.$setViewValue(...);
+});
+</code></pre>
+
+<h4 id="visualising-the-full-circle">Visualising the full circle</h4>
+
+<pre><code>&lt;realModel&gt; → ngModelCtrl.$formatters(realModel) → $viewModel
+                                                       ↓
+↑                                                  $render()
+                                                       ↓
+↑                                                  UI changed
+                                                       ↓
+ngModelCtrl.$parsers(newViewModel)    ←    $setViewModel(newViewModel)
+</code></pre>
+
+<h2 id="the-full-directive">The full directive</h2>
+
+<p>Putting it all together, the full directive looks something like this:</p>
+
+<pre><code class="language-javascript">function TimeDurationDirective() {
+    var tpl = &quot;&lt;div&gt; \
+        &lt;input type='text' ng-model='num' size='80' /&gt; \
+        &lt;select ng-model='unit'&gt; \
+            &lt;option value='secs'&gt;Seconds&lt;/option&gt; \
+            &lt;option value='mins'&gt;Minutes&lt;/option&gt; \
+            &lt;option value='hours'&gt;Hours&lt;/option&gt; \
+            &lt;option value='days'&gt;Days&lt;/option&gt; \
+        &lt;/select&gt; \
+    &lt;/div&gt;&quot;;
+
+    return {
+        restrict: 'E',
+        template: tpl,
+        require: 'ngModel',
+        replace: true,
+        link: function(scope, iElement, iAttrs, ngModelCtrl) {
+            // Units of time
+            multiplierMap = {seconds: 1, minutes: 60, hours: 3600, days: 86400};
+            multiplierTypes = ['seconds', 'minutes', 'hours', 'days']
+
+            ngModelCtrl.$formatters.push(function(modelValue) {
+                var unit = 'minutes', num = 0, i, unitName;
+
+                modelValue = parseInt(modelValue || 0);
+
+                // Figure out the largest unit of time the model value
+                // fits into. For example, 3600 is 1 hour, but 1800 is 30 minutes.
+                for (i = multiplierTypes.length-1; i &gt;= 0; i--) {
+                    unitName = multiplierTypes[i];
+                    if (modelValue % multiplierMap[unitName] === 0) {
+                        unit = unitName;
+                        break;
+                    }
+                }
+
+                if (modelValue) {
+                    num = modelValue / multiplierMap[unit]
+                }
+
+                return {
+                    unit: unit,
+                    num:  num
+                };
+            });
+
+            ngModelCtrl.$parsers.push(function(viewValue) {
+                var unit = viewValue.unit, num = viewValue.num, multiplier;
+                multiplier = multiplierMap[unit];
+                return num * multiplier;
+            });
+
+            scope.$watch('unit + num', function() {
+                ngModelCtrl.$setViewValue({ unit: scope.unit, num: scope.num });
+            });
+
+            ngModelCtrl.$render = function() {
+                if (!$viewValue) $viewValue = { unit: 'hours', num: 1 };
+
+                scope.unit = ngModelCtrl.$viewValue.unit;
+                scope.num  = ngModelCtrl.$viewValue.num;
+            };
+        }
+    };
+};
+
+angular.module('myModule').directive('timeDuration', TimeDurationDirective);
+</code></pre>
+
+<p>That&rsquo;s all there is to it! It&rsquo;s a little confusing at fist, but once you understand the workflow and how all the components fit together, you can see how flexible the system really is.</p>
+
+  </div>
+</div>
+
+      <footer>
+        <hr>
+        <small>
+          &copy; 2019 
+        </small>
+      </footer>
+    </div> 
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    var clicky_site_ids = clicky_site_ids || [];
+    clicky_site_ids.push(101151077);
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//static.getclicky.com/js';
+      ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+    })();
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101151077ns.gif" /></p></noscript>
+  </body>
+</html>
+
