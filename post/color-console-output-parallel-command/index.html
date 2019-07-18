@@ -9,7 +9,7 @@
 
         <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet"> 
 
-        <title>AWS</title>
+        <title>Quickie: Color console output with parallel command</title>
 
         <link rel="stylesheet" href="/css/stylesheet.css">
     </head>
@@ -42,22 +42,34 @@
         </section>
 
 
-<section>
-  <ul class="posts_listing">
-    
-    <li>
-      <div class="row" id="posts">
-        <div class="d-none d-sm-block col-sm-3 date-time-title">
-          <time>27 Feb 2016</time>
-        </div>
-        <div class="col-sm date-time-title post">
-          <a href="/post/aws-vpc-network-structure/">AWS VPC Network Structure</a>
-        </div>
-      </div>
-    </li>
-    
-  </ul>
-</section>
+<div class="blog-post">
+  <h1>Quickie: Color console output with parallel command</h1>
+  <div class="blog-post-subheader">
+    <time>18 Jul 2019</time>
+  </div>
+  <div class="blog-post-content">
+    <p>I&rsquo;ve got a Lerna monorepos with a few microservices. I needed to run the dev version a few of these microservices so I decided to use parallel to run them all at the same time in my terminal:</p>
+
+<pre><code class="language-shell">parallel --tagstring '{/}' --linebuffer 'cd {} &amp;&amp; npm run dev' ::: packages/service-a packages/service-b packages/service-c
+</code></pre>
+
+<p>This worked, but I noticed that the color output was stripped when doing this. This is really annoying. The color really helps during development to spot errors.</p>
+
+<p>The reason is mostly that scripts don&rsquo;t think they&rsquo;re in a tty, so they disable coloring. Sometimes you can force-enable colors (such as with <code>ls --color=always</code>), but not all scripts and programs have a flag like that.</p>
+
+<p>I figured that the <a href="https://linux.die.net/man/1/unbuffer"><code>unbuffer</code></a> utility can be used to basically &ldquo;trick&rdquo; scripts into thinking they&rsquo;re in a tty.</p>
+
+<pre><code class="language-shell">parallel --tagstring '{/}' --linebuffer 'cd {} &amp;&amp; unbuffer npm run dev' ::: packages/service-a packages/service-b packages/service-c
+</code></pre>
+
+<p>Boom. Done. 🎉</p>
+
+<p><strong>Installing <code>unbuffer</code></strong></p>
+
+<p>It&rsquo;s part of the <code>expect</code> package. So <code>brew install expect</code>, <code>apt-get install expect</code>, <code>yum install expect</code> etc.</p>
+
+  </div>
+</div>
 
       <footer>
         <hr>
