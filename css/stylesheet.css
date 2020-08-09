@@ -1,5 +1,5 @@
 body {
-    font-family: 'Ubuntu', sans-serif;
+    font-family: "Proxima Nova","Helvetica Neue","Helvetica","Segoe UI","Nimbus Sans L","Liberation Sans","Open Sans",FreeSans,Arial,sans-serif;
     margin: auto;
     max-width: 50em;
 }
@@ -28,7 +28,7 @@ body {
 }
 
 .date-time-title {
-    font-family: 'Ubuntu Mono', monospace;
+    font-family: 'Melno', 'Monaco', monospace;
 }
 
 .blog-post-content {

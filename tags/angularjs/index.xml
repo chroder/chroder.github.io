@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>AngularJS on Christopher Nadeau</title>
@@ -18,7 +18,7 @@
       
       <guid>https://www.nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</guid>
       <description>Creating directives with AngularJS is fairly straightforward. But most directives also need to interact with a model which represents their state. You could bake in your own custom model handling, but you can also plug right in to AngularJS&amp;rsquo;s own NgModelController &amp;ndash; the same ng-model that is used for things like input boxes and select menus.
-Example directive: &amp;lt;time-duration /&amp;gt; As a simple example, let&amp;rsquo;s build a directive where the user can input a duration using one of many possible units of time.</description>
+ Example directive: &amp;lt;time-duration /&amp;gt; As a simple example, let&amp;rsquo;s build a directive where the user can input a duration using one of many possible units of time.</description>
     </item>
     
   </channel>

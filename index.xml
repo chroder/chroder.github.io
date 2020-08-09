@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christopher Nadeau</title>
@@ -10,6 +10,17 @@
     
 	<atom:link href="https://www.nadeau.tv/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>About</title>
+      <link>https://www.nadeau.tv/about/</link>
+      <pubDate>Sat, 08 Aug 2020 00:00:00 +0100</pubDate>
+      
+      <guid>https://www.nadeau.tv/about/</guid>
+      <description>
+I’m Christopher Nadeau. I’m the CTO over at Deskpro. I like writing and shipping software, and building businesses.
+Connect  GitHub: @chroder Twitter: @chroder Email: chris at nadeau dot tv  </description>
+    </item>
     
     <item>
       <title>Quickie: Color console output with parallel command</title>
@@ -24,7 +35,7 @@ parallel --tagstring &#39;{/}&#39; --linebuffer &#39;cd {} &amp;amp;&amp;amp; np
     <item>
       <title>SPF, DKIM, DMARC: What they do and what they don&#39;t</title>
       <link>https://www.nadeau.tv/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</link>
-      <pubDate>Thu, 08 Nov 2018 15:54:31 +0000</pubDate>
+      <pubDate>Fri, 14 Jun 2019 15:54:31 +0000</pubDate>
       
       <guid>https://www.nadeau.tv/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</guid>
       <description>Email is such a mess of technologies and standards, it&amp;rsquo;s hard to understand how everything works together. When it comes to SPF, DKIM, DMARC, there are some misconceptions.
@@ -120,31 +131,13 @@ The only very important thing you need to do is edit my.cnf and set a server-id 
     </item>
     
     <item>
-      <title>About</title>
-      <link>https://www.nadeau.tv/about/</link>
-      <pubDate>Sun, 17 Jan 2016 13:27:50 +0000</pubDate>
-      
-      <guid>https://www.nadeau.tv/about/</guid>
-      <description>   I’m Christopher Nadeau. I’m the CTO over at Deskpro. I like writing and shipping software, and building businesses. Connect  GitHub: @chroder Twitter: @chroder Email: &amp;#099;&amp;#104;&amp;#114;&amp;#105;&amp;#115;&amp;#064;&amp;#110;&amp;#097;&amp;#100;&amp;#101;&amp;#097;&amp;#117;&amp;#046;&amp;#116;&amp;#118;  Tweets by @chroder !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?&#39;http&#39;:&#39;https&#39;;if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+&#34;://platform.twitter.com/widgets.js&#34;;fjs.parentNode.insertBefore(js,fjs);}}(document,&#34;script&#34;,&#34;twitter-wjs&#34;);   The elephant icon logo is made by Freepic (CC BY 3.0).   </description>
-    </item>
-    
-    <item>
       <title>Using NgModelController with Custom Directives</title>
       <link>https://www.nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</link>
       <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
       
       <guid>https://www.nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</guid>
       <description>Creating directives with AngularJS is fairly straightforward. But most directives also need to interact with a model which represents their state. You could bake in your own custom model handling, but you can also plug right in to AngularJS&amp;rsquo;s own NgModelController &amp;ndash; the same ng-model that is used for things like input boxes and select menus.
-Example directive: &amp;lt;time-duration /&amp;gt; As a simple example, let&amp;rsquo;s build a directive where the user can input a duration using one of many possible units of time.</description>
-    </item>
-    
-    <item>
-      <title>Ditching Google</title>
-      <link>https://www.nadeau.tv/post/ditching-google/</link>
-      <pubDate>Sat, 01 Feb 2014 15:05:00 +0000</pubDate>
-      
-      <guid>https://www.nadeau.tv/post/ditching-google/</guid>
-      <description>Over the years, there have been so many blog posts determined to convince us that Google is becoming evil. This isn&amp;rsquo;t one of those kinds of rants. I don&amp;rsquo;t really mind Google as a company. I love my Nexus 5, I still use Google search and I love Google Chrome. I think they do some pretty stupid stuff from time to time (more on this below), but I don&amp;rsquo;t think they&amp;rsquo;re fundamentally an evil company and my moving away from them isn&amp;rsquo;t some kind of political statement.</description>
+ Example directive: &amp;lt;time-duration /&amp;gt; As a simple example, let&amp;rsquo;s build a directive where the user can input a duration using one of many possible units of time.</description>
     </item>
     
   </channel>

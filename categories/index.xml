@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Christopher Nadeau</title>
@@ -89,15 +89,6 @@
       <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
       
       <guid>https://www.nadeau.tv/categories/javascript/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Products</title>
-      <link>https://www.nadeau.tv/categories/products/</link>
-      <pubDate>Sat, 01 Feb 2014 15:05:00 +0000</pubDate>
-      
-      <guid>https://www.nadeau.tv/categories/products/</guid>
       <description></description>
     </item>
     

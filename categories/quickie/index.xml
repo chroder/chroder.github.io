@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Quickie on Christopher Nadeau</title>
@@ -29,7 +29,8 @@ The biggest sore spot with me is 1password which I use dozens of times a day, an
       <guid>https://www.nadeau.tv/post/quickie-quickly-rename-mysql-database/</guid>
       <description>There&amp;rsquo;s no way to rename a MySQL database. Typical advice is to dump/restore the database, but this is obviously very slow if you have a huge database.
 I found a solution today. Create your database, then execute this one-line:
-mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &amp;quot;rename table OLD_DB.$t to NEW_DB.$t&amp;quot;; done   Obviously replace the params as necessary.</description>
+mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &amp;quot;rename table OLD_DB.$t to NEW_DB.$t&amp;quot;; done  Obviously replace the params as necessary.
+ Or here&amp;rsquo;s the same as a slightly easier to read bash script:</description>
     </item>
     
   </channel>
