@@ -6,10 +6,20 @@
     <description>Recent content in Chris&#39; Blog on Christopher Nadeau</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 18 Jul 2019 16:20:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 08 Aug 2020 00:00:00 +0100</lastBuildDate>
     
 	<atom:link href="https://www.nadeau.tv/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Secure home server with Unraid and Cloudflare</title>
+      <link>https://www.nadeau.tv/post/unraid-home-server-with-cloudflare/</link>
+      <pubDate>Sat, 08 Aug 2020 00:00:00 +0100</pubDate>
+      
+      <guid>https://www.nadeau.tv/post/unraid-home-server-with-cloudflare/</guid>
+      <description>I built a home server earlier this year to serve as a NAS and home media center. I&amp;rsquo;m trying to make a more concerted effort to take control over my own data and rely less on cloud services.
+I chose Unraid as the underlying operating system. If you&amp;rsquo;re building a home server, I really recommend checking it out. Out of the options I tried, Unraid was by far the easiest to get up and running with.</description>
+    </item>
     
     <item>
       <title>Quickie: Color console output with parallel command</title>
