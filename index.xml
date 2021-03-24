@@ -6,10 +6,17 @@
     <description>Recent content on Christopher Nadeau</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Sat, 08 Aug 2020 00:00:00 +0100</lastBuildDate>
-    
-	<atom:link href="https://www.nadeau.tv/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Tue, 23 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.nadeau.tv/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fast Integration Tests with MySQL</title>
+      <link>https://www.nadeau.tv/post/fast-integration-tests-with-mysql/</link>
+      <pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.nadeau.tv/post/fast-integration-tests-with-mysql/</guid>
+      <description>We have a collection of nearly 700 integration tests (and growing!) in over 130 suites that we run against a live MySQL database. These tests are mostly performing GraphQL mutations, and the tests basically just assert that the mutation does what it&amp;rsquo;s meant to do.
+As time goes on and we add more and more tests, the test suite was becoming slower and slower&amp;hellip;
+Resetting the DB between tests To ensure tests aren&amp;rsquo;t too fragile, early on we added a beforeAll routine that reset the database between each suite.</description>
+    </item>
     
     <item>
       <title>About</title>

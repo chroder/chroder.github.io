@@ -6,11 +6,7 @@
     <description>Recent content in MySQL on Christopher Nadeau</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 16 Jun 2016 16:11:04 +0000</lastBuildDate>
-    
-	<atom:link href="https://www.nadeau.tv/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 16 Jun 2016 16:11:04 +0000</lastBuildDate><atom:link href="https://www.nadeau.tv/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>pt-online-schema-change error &#34;Error creating new table ... duplicate key&#34;</title>
       <link>https://www.nadeau.tv/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</link>

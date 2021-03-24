@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <meta name="generator" content="Hugo 0.82.0" />
-  <link rel="canonical" href="https://www.nadeau.tv/tags/productivity/">
+  <link rel="canonical" href="https://www.nadeau.tv/post/fast-integration-tests-with-mysql/">
 
   
 
@@ -34,7 +34,7 @@
 
   
   
-  <title>Productivity | Christopher Nadeau</title>
+  <title>Fast Integration Tests with MySQL | Christopher Nadeau</title>
 </head>
 
   <body>
@@ -159,7 +159,7 @@
       
       
       
-      <a href="/post" >
+      <a href="/post" aria-current="page">
         <svg class="bookmark-icon" aria-hidden="true" focusable="false" viewBox="0 0 40 50">
           <use xlink:href="#bookmark"></use>
         </svg>
@@ -172,7 +172,7 @@
       
       
       
-      <a href="/tags/" aria-current="page">
+      <a href="/tags/" >
         <svg class="bookmark-icon" aria-hidden="true" focusable="false" viewBox="0 0 40 50">
           <use xlink:href="#bookmark"></use>
         </svg>
@@ -214,52 +214,267 @@
       <div class="main-and-footer">
         <div>
           
-<main id="main">
-  <h1>Productivity</h1>
+  <main id="main">
+    <h1>
+      <svg class="bookmark-icon" aria-hidden="true" viewBox="0 0 40 50" focusable="false">
+        <use xlink:href="#bookmark"></use>
+      </svg>
+      Fast Integration Tests with MySQL
+    </h1>
+
+    <div class="date">
+      
+      
+      <strong>Publish date: </strong>Mar 23, 2021
+      
+        
+      
+    </div>
+
+    
+      <div class="tags">
+        <strong>Tags: </strong>
+        <ul aria-label="tags">
+          
+            <li>
+              <svg class="tag-icon" aria-hidden="true" viewBox="0 0 177.16535 177.16535" focusable="false">
+                <use xlink:href="#tag"></use>
+              </svg>
+              
+              <a href="https://www.nadeau.tv/tags/engineering/">Engineering</a>
+            </li>
+          
+        </ul>
+      </div>
+    
+    
+    
+      
+
+  <nav class="toc" aria-labelledby="toc-heading">
+    <h2 id="toc-heading">Table of contents</h2>
+    <ol>
+      
+        <li>
+          
+          
+          
+          
+          <a href="#resetting-the-db-between-tests">
+            Resetting the DB between tests
+          </a>
+        </li>
+      
+        <li>
+          
+          
+          
+          
+          <a href="#ideas">
+            Ideas
+          </a>
+        </li>
+      
+        <li>
+          
+          
+          
+          
+          <a href="#using-triggers">
+            Using triggers
+          </a>
+        </li>
+      
+    </ol>
+  </nav>
+
+
+    
+
+    <p>We have a collection of nearly 700 integration tests (and growing!) in over 130 suites that we run against a live MySQL database. These tests are mostly performing GraphQL mutations, and the tests basically just assert that the mutation does what it&rsquo;s meant to do.</p>
+<p>As time goes on and we add more and more tests, the test suite was becoming slower and slower&hellip;</p>
+<h2 id="resetting-the-db-between-tests">Resetting the DB between tests</h2>
+<p>To ensure tests aren&rsquo;t too fragile, early on we added a <a href="https://jestjs.io/docs/setup-teardown"><code>beforeAll</code></a> routine that reset the database between each suite.</p>
+<p>To reset the database, we were basically doing this:</p>
+<pre><code class="language-bash"># reset.sh
+mysql -e 'DROP DATABASE test;'
+mysql -e 'CREATE DATABASE test;'
+mysql test &lt; fixtures.sql
+</code></pre>
+<p>This is super simple and just works, but it&rsquo;s a pretty heavy operation. Our product has over 400 tables, and our set of fixture data is quite large because the product is a data-intensive app and it&rsquo;s just a big product. Over time, as one might expect, the tests became slower and slower, and the load on our CI server just kept climbing.</p>
+<p>So at the point where it was taking ~20 mins to run the suite over 4 workers, I started thinking about ways to improve performance.</p>
+<h2 id="ideas">Ideas</h2>
+<p>There&rsquo;s lots of writing on this you can find via Google and we had some of our own ideas flying around too. Here&rsquo;s a list of a few things we thought about:</p>
+<ul>
+<li>Building a complete docker container once per run, database and all, and then just spin up the container once for each suite.</li>
+<li>Attempt to find a way to run tests within transactions, so they could just be rolled-back at the end. (This is pretty common practice, but in our case, was impossible.)</li>
+<li>Just&hellip; don&rsquo;t reset after every suite. Or maybe group tests in a way where they won&rsquo;t interfere with eachother. (We thought this would be too error prone and fragile.)</li>
+<li>Write tests that set up their own fixtures. i.e. write them in such a way where it doesn&rsquo;t matter what was run before them. (We thought this would be tedious; we already put a lot of effort in our dev seed dataset.)</li>
+<li>And probably a few more that I&rsquo;ve forgotten to mention.</li>
+</ul>
+<p>All of these have their pros/cons. Ultimately though I was searching for a bit of a golden ticket. I wanted something that I could whip up fast (didn&rsquo;t require loads of effort/refactoring to existing tests), and something I could deploy fast (didn&rsquo;t require infra changes or big changes to CI scripts).</p>
+<h2 id="using-triggers">Using triggers</h2>
+<p>I came up with the idea that we could use triggers to record which tables changed during any given test, and then on the run of the next test, only reset the <em>changed</em> tables. In most cases only one or two tables change so resetting just two tables is significantly faster than re-creating the entire database.</p>
+<p>Here&rsquo;s what I came up with:</p>
+<ul>
+<li>The initial database is created and seeded with fixtures as usual</li>
+<li>Create a copy of all tables to act as &ldquo;seed tables&rdquo; - they contain the pristine seed data</li>
+<li>Create a trigger on each table that records when any INSERT/UPDATE/DELETE is performed</li>
+<li>Tests run as usual</li>
+<li>Between tests, interrogate the record of changes to find which tables were changed, and
+re-seed those tables from the copies.</li>
+</ul>
+<h3 id="in-practice">In Practice</h3>
+<p>I created a Laravel command to &ldquo;install test helpers&rdquo;. This reads the schema and creates the necessary triggers on each table, then creates the necessary copy, and then also creates a special stored procedure to handle resetting the tables after each test.</p>
+<p>Here&rsquo;s what it looks like:</p>
+<pre><code>&lt;?php
+
+namespace App\Console\Commands\Test;
+
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
+class InstallHelpersCommand extends Command
+{
+    protected $signature = '
+        test:install-helpers
+    ';
+
+    public function handle()
+    {
+        $this-&gt;getOutput()-&gt;write('Create _test_tbl_changed ... ');
+        DB::unprepared('DROP TABLE IF EXISTS `_test_tbl_changed`');
+        DB::unprepared('
+            CREATE TABLE `_test_tbl_changed` (
+              `id` bigint NOT NULL AUTO_INCREMENT,
+              `tbl` varchar(255) NOT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4
+        ');
+        $this-&gt;getOutput()-&gt;writeln('OK');
+
+        $this-&gt;getOutput()-&gt;write('Create _testRefillFromSeed procedure ... ');
+        DB::unprepared(&quot;DROP PROCEDURE IF EXISTS _testRefillFromSeed&quot;);
+        DB::unprepared(&quot;
+            CREATE PROCEDURE _testRefillFromSeed()
+            BEGIN
+                DECLARE done INT DEFAULT 0;
+                DECLARE numReset INT DEFAULT 0;
+                DECLARE tblName VARCHAR(255) DEFAULT NULL;
+
+                DECLARE cur CURSOR FOR
+                    SELECT tbl FROM _test_tbl_changed GROUP BY tbl;
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+                SET @dp_is_refilling=1;
+
+                OPEN cur;
+                SET FOREIGN_KEY_CHECKS = 0;
+
+                REPEAT
+                    FETCH cur INTO tblName;
+
+                    IF tblName IS NOT NULL THEN
+                        SET @TruncateQuery = CONCAT(
+                            'TRUNCATE ', tblName
+                        );
+                        PREPARE stmt FROM @TruncateQuery;
+                        EXECUTE stmt;
+
+                        SET @InsertQuery = CONCAT(
+                            'INSERT ', tblName, ' ',
+                            'SELECT * FROM `_test_seed_', tblName, '`'
+                        );
+                        PREPARE stmt FROM @InsertQuery;
+                        EXECUTE stmt;
+
+                        SET numReset = numReset + 1;
+                    END IF;
+                UNTIL done = 1 END REPEAT;
+                CLOSE cur;
+
+                SET FOREIGN_KEY_CHECKS = 1;
+                TRUNCATE TABLE _test_tbl_changed;
+                SET @dp_is_refilling=0;
+
+                SELECT numReset AS 'Number of tables reset';
+            END
+        &quot;);
+        $this-&gt;getOutput()-&gt;writeln('OK');
+
+        $tableNames = collect(DB::select(&quot;SHOW TABLES&quot;))-&gt;map(fn ($r) =&gt; reset($r));
+
+        $this-&gt;getOutput()-&gt;write('Creating change watch triggers ');
+        foreach ($tableNames as $tbl) {
+            if ($tbl === '_test_tbl_changed') {
+                continue;
+            }
+
+            foreach (['INSERT', 'UPDATE', 'DELETE'] as $event) {
+                $this-&gt;getOutput()-&gt;write('.');
+                $id = md5(&quot;change_{$tbl}_{$event}&quot;);
+                DB::statement(&quot;DROP TRIGGER IF EXISTS _test_{$id}&quot;);
+                DB::statement(&quot;
+                    CREATE TRIGGER _test_{$id}
+                    AFTER {$event} ON `$tbl` FOR EACH ROW
+                    BEGIN
+                        IF @dp_is_refilling IS NULL OR @dp_is_refilling != 1 THEN
+                            INSERT INTO _test_tbl_changed (tbl) VALUES ('$tbl');
+                        END IF;
+                    END
+                &quot;);
+            }
+        }
+        $this-&gt;getOutput()-&gt;writeln(' OK');
+
+        $this-&gt;getOutput()-&gt;write('Copying seed tables ');
+        foreach ($tableNames as $tbl) {
+            $newTbl = '_test_seed_' . $tbl;
+
+            if (Str::startsWith($tbl, '_test_')) {
+                continue;
+            }
+
+            $this-&gt;getOutput()-&gt;write('.');
+            DB::statement(&quot;DROP TABLE IF EXISTS `$newTbl`&quot;);
+            DB::statement(&quot;CREATE TABLE `$newTbl` LIKE `$tbl`&quot;);
+            DB::unprepared(&quot;
+                INSERT `$newTbl`
+                SELECT * FROM `$tbl`
+            &quot;);
+        }
+        $this-&gt;getOutput()-&gt;writeln(' OK');
+    }
+}
+</code></pre>
+<p>All you need to do is have the test runner execute the special <code>_testRefillFromSeed</code> stored procedure after ever test. In our case, we had an env var that contained the reset command and it was just a matter of setting it:</p>
+<pre><code>DB_RESET_CMD=&quot;mysql test -N -B -e 'CALL _testRefillFromSeed();'&quot;
+</code></pre>
+<p>And from the Jest side looks a little like</p>
+<pre><code class="language-javascript">import { spawnSync } from 'child_process';
+beforeAll(() =&gt; {
+  const options = {
+    shell: true,
+    cwd: __dirname,
+    env: {...process.env, ...env},
+    stdio: [0, 1, 2]
+  };
   
-  <input
-    id="search"
-    type="text"
-    placeholder="Search by title..."
-    aria-label="Search by title"
-  />
+  const status = spawnSync(process.env.DB_RESET_CMD, null, options).status;
+  if (status) {
+    console.error('Failed to reset db with command: ' + process.env.DB_RESET_CMD);
+    process.exit(status);
+  }
+});
+</code></pre>
+<p>Easy peasy. Hit all the goals: No changes to tests needed, no changes to infra, and everything is faster with less load on the CI server.</p>
+
+  </main>
+  <div id="disqus-container">
   
-  <ul class="patterns-list" id="list">
-    
-    <li>
-      <h2>
-        <a href="https://www.nadeau.tv/post/configure-hyper-key-osx/">
-          <svg
-            class="bookmark"
-            aria-hidden="true"
-            viewBox="0 0 40 50"
-            focusable="false"
-          >
-            <use xlink:href="#bookmark"></use>
-          </svg>
-          Configure a Hyper Key on OSX
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h2>
-        <a href="https://www.nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/">
-          <svg
-            class="bookmark"
-            aria-hidden="true"
-            viewBox="0 0 40 50"
-            focusable="false"
-          >
-            <use xlink:href="#bookmark"></use>
-          </svg>
-          Quickie: Prevent Mac apps from quitting when last window is closed
-        </a>
-      </h2>
-    </li>
-    
-  </ul>
-</main>
+</div>
+
 
           <footer role="contentinfo">
   <div>
