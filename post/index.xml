@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Chris&#39; Blog on Christopher Nadeau</title>
+    <title>Posts on Chris&#39; Blog</title>
     <link>https://www.nadeau.tv/post/</link>
-    <description>Recent content in Chris&#39; Blog on Christopher Nadeau</description>
+    <description>Recent content in Posts on Chris&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Tue, 23 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.nadeau.tv/post/index.xml" rel="self" type="application/rss+xml" />
@@ -35,7 +35,7 @@ I chose Unraid as the underlying operating system. If you&amp;rsquo;re building 
       
       <guid>https://www.nadeau.tv/post/color-console-output-parallel-command/</guid>
       <description>I&amp;rsquo;ve got a Lerna monorepos with a few microservices. I needed to run the dev version a few of these microservices so I decided to use parallel to run them all at the same time in my terminal:
-parallel --tagstring &#39;{/}&#39; --linebuffer &#39;cd {} &amp;amp;&amp;amp; npm run dev&#39; ::: packages/service-a packages/service-b packages/service-c  This worked, but I noticed that the color output was stripped when doing this. This is really annoying.</description>
+parallel --tagstring &amp;#39;{/}&amp;#39; --linebuffer &amp;#39;cd {} &amp;amp;&amp;amp; npm run dev&amp;#39; ::: packages/service-a packages/service-b packages/service-c This worked, but I noticed that the color output was stripped when doing this. This is really annoying. The color really helps during development to spot errors.</description>
     </item>
     
     <item>
@@ -98,7 +98,8 @@ The biggest sore spot with me is 1password which I use dozens of times a day, an
       <guid>https://www.nadeau.tv/post/quickie-quickly-rename-mysql-database/</guid>
       <description>There&amp;rsquo;s no way to rename a MySQL database. Typical advice is to dump/restore the database, but this is obviously very slow if you have a huge database.
 I found a solution today. Create your database, then execute this one-line:
-mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &amp;quot;rename table OLD_DB.$t to NEW_DB.$t&amp;quot;; done   Obviously replace the params as necessary.</description>
+mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &amp;quot;rename table OLD_DB.$t to NEW_DB.$t&amp;quot;; done  Obviously replace the params as necessary.
+ Or here&amp;rsquo;s the same as a slightly easier to read bash script:</description>
     </item>
     
     <item>

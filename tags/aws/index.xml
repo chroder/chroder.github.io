@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>AWS on Christopher Nadeau</title>
+    <title>AWS on Chris&#39; Blog</title>
     <link>https://www.nadeau.tv/tags/aws/</link>
-    <description>Recent content in AWS on Christopher Nadeau</description>
+    <description>Recent content in AWS on Chris&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Sat, 27 Feb 2016 13:32:41 +0000</lastBuildDate><atom:link href="https://www.nadeau.tv/tags/aws/index.xml" rel="self" type="application/rss+xml" />
