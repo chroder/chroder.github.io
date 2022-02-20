@@ -4,11 +4,11 @@
     <title>SPF, DKIM, DMARC: What they do and what they don&#39;t // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -22,16 +22,16 @@ The first thing to understand is that there are two email addresses in an email:
 The major misconception is around what SPF and DKIM actually do. Many people think that SPF and DKIM are somehow related to controlling who can send messages From your domain, but that&rsquo;s not totally true.
 The first thing to understand is that there are two email addresses in an email:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2019-06-14T15:54:31&#43;00:00" />
-<meta property="article:modified_time" content="2019-06-14T15:54:31&#43;00:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2019-06-14T15:54:31+00:00" />
+<meta property="article:modified_time" content="2019-06-14T15:54:31+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -108,7 +108,7 @@ The first thing to understand is that there are two email addresses in an email:
 <p>In simple cases, the <code>MAIL FROM</code> and the <code>From:</code> header are the same. For example, if you send an email from your iPhone, then most likely the two values will be the same email address. If you send an email to someone and make a typo in their email address, then you get a bounce message back to your inbox.</p>
 <p>But sometimes you might want to return messages to a <em>different</em> email address. This is really common today where services want to automatically catch and process bounces. For example, imagine if you&rsquo;re sending a few million email newsletters – you&rsquo;ll want to automatically catch and remove bogus email addresses so you don&rsquo;t send to it next time.</p>
 <p>This is often done by using a special mailbox where software can monitor emails and process them accordingly. For example:</p>
-<pre><code>MAIL FROM: &lt;user=example.com@bounce-detection.my-site.com&gt;
+<pre tabindex="0"><code>MAIL FROM: &lt;user=example.com@bounce-detection.my-site.com&gt;
 
 From: newsletter@my-site.com
 To: user@example.com
@@ -118,7 +118,7 @@ Subject: My greate newsletter
 <h1 id="spf">SPF</h1>
 <p>SPF verifies that the server sending a message is allowed to send. A domain owner publishes a DNS record that declares the IP addresses of all the servers that are able to send from that domain. If SPF fails, then depending on the policy defined, the message might be classified as spam or dropped completely.</p>
 <p>The key thing to recognise here is that this validation applies to <code>MAIL FROM</code> and <em>not</em> the <code>From:</code> header. As we discussed above, these are two completely different things. For example:</p>
-<pre><code>MAIL FROM: &lt;malicious-user@bad-actor.com&gt;
+<pre tabindex="0"><code>MAIL FROM: &lt;malicious-user@bad-actor.com&gt;
 From: contact@your-bank.com
 </code></pre><p>When a receiving server gets a message here, it will look-up the SPF record for <code>bad-actor.com</code> and verify that the server sending the message is published in the record. It doesn&rsquo;t look at or care that the actual <code>From:</code> address is totally unrelated.</p>
 <p>In other words, anyone can just go and buy a domain and validate their own SPF records. They can spoof the <code>From:</code> address that the user sees and the message would still pass SPF checks.</p>
@@ -126,7 +126,7 @@ From: contact@your-bank.com
 <h1 id="dkim">DKIM</h1>
 <p>DKIM is a method to sign email messages in such a way where the receiving email server can verify the integrity of the message is valid.</p>
 <p>An administrator or email provider has a secret private key that is used to generate a signature that gets added to the message. It looks a bit like this:</p>
-<pre><code>DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=foobar;
+<pre tabindex="0"><code>DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=foobar;
 	...
 </code></pre><p>The signature declares a domain (d) and a selector (s). To validate the message, you fetch the <em>public key</em> from <code>$selector._domainkey.$domain</code> – which is a TXT record. Using the public key you can verify the provided signature is valid.</p>
 <p>Note that the domain can be anything here, which means DKIM also fails to prevent spam and spoofing because a bad actor can very easily just sign messages using his own key and publish it on his own domain.</p>

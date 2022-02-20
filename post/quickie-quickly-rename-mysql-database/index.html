@@ -4,11 +4,11 @@
     <title>Quickie: Quickly rename MySQL database // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -24,16 +24,16 @@ I found a solution today. Create your database, then execute this one-line:
 mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &quot;rename table OLD_DB.$t to NEW_DB.$t&quot;; done  Obviously replace the params as necessary.
  Or here&rsquo;s the same as a slightly easier to read bash script:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/quickie-quickly-rename-mysql-database/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2016-03-02T17:42:43&#43;00:00" />
-<meta property="article:modified_time" content="2016-03-02T17:42:43&#43;00:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/quickie-quickly-rename-mysql-database/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-03-02T17:42:43+00:00" />
+<meta property="article:modified_time" content="2016-03-02T17:42:43+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -91,21 +91,21 @@ mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://www.nadeau.tv/tags/devops/">DevOps</a>
-              <a class="tag" href="https://www.nadeau.tv/tags/quickie/">Quickie</a>
-              <a class="tag" href="https://www.nadeau.tv/tags/mysql/">MySQL</a>
+              <a class="tag" href="https://www.nadeau.io/tags/devops/">DevOps</a>
+              <a class="tag" href="https://www.nadeau.io/tags/quickie/">Quickie</a>
+              <a class="tag" href="https://www.nadeau.io/tags/mysql/">MySQL</a>
         </div>
       </div>
     </header>
     <div class="post-content">
       <p>There&rsquo;s no way to rename a MySQL database. Typical advice is to dump/restore the database, but this is obviously very slow if you have a huge database.</p>
 <p>I found a solution today. Create your database, then execute this one-line:</p>
-<pre><code>mysql -uUSER -pPASS OLD_DB -sNe 'SHOW TABLES' | while read t; do mysql -u username -ppassword -sNe &quot;rename table OLD_DB.$t to NEW_DB.$t&quot;; done
+<pre tabindex="0"><code>mysql -uUSER -pPASS OLD_DB -sNe 'SHOW TABLES' | while read t; do mysql -u username -ppassword -sNe &quot;rename table OLD_DB.$t to NEW_DB.$t&quot;; done
 </code></pre><blockquote>
 <p>Obviously replace the params as necessary.</p>
 </blockquote>
 <p>Or here&rsquo;s the same as a slightly easier to read bash script:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#ff79c6">#!/bin/bash
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#ff79c6">#!/bin/bash
 </span><span style="color:#ff79c6"></span>
 <span style="color:#8be9fd;font-style:italic">DB_HOST</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span>
 <span style="color:#8be9fd;font-style:italic">DB_USER</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;root&#34;</span>

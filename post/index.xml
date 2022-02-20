@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Chris&#39; Blog</title>
-    <link>https://www.nadeau.tv/post/</link>
+    <link>https://www.nadeau.io/post/</link>
     <description>Recent content in Posts on Chris&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 23 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.nadeau.tv/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 23 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.nadeau.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Fast Integration Tests with MySQL</title>
-      <link>https://www.nadeau.tv/post/fast-integration-tests-with-mysql/</link>
+      <link>https://www.nadeau.io/post/fast-integration-tests-with-mysql/</link>
       <pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/fast-integration-tests-with-mysql/</guid>
+      <guid>https://www.nadeau.io/post/fast-integration-tests-with-mysql/</guid>
       <description>We have a collection of nearly 700 integration tests (and growing!) in over 130 suites that we run against a live MySQL database. These tests are mostly performing GraphQL mutations, and the tests basically just assert that the mutation does what it&amp;rsquo;s meant to do.
 As time goes on and we add more and more tests, the test suite was becoming slower and slower&amp;hellip;
 Resetting the DB between tests To ensure tests aren&amp;rsquo;t too fragile, early on we added a beforeAll routine that reset the database between each suite.</description>
@@ -20,30 +20,30 @@ Resetting the DB between tests To ensure tests aren&amp;rsquo;t too fragile, ear
     
     <item>
       <title>Secure home server with Unraid and Cloudflare</title>
-      <link>https://www.nadeau.tv/post/unraid-home-server-with-cloudflare/</link>
-      <pubDate>Sat, 08 Aug 2020 00:00:00 +0100</pubDate>
+      <link>https://www.nadeau.io/post/unraid-home-server-with-cloudflare/</link>
+      <pubDate>Sat, 08 Aug 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/unraid-home-server-with-cloudflare/</guid>
+      <guid>https://www.nadeau.io/post/unraid-home-server-with-cloudflare/</guid>
       <description>I built a home server earlier this year to serve as a NAS and home media center. I&amp;rsquo;m trying to make a more concerted effort to take control over my own data and rely less on cloud services.
 I chose Unraid as the underlying operating system. If you&amp;rsquo;re building a home server, I really recommend checking it out. Out of the options I tried, Unraid was by far the easiest to get up and running with.</description>
     </item>
     
     <item>
       <title>Quickie: Color console output with parallel command</title>
-      <link>https://www.nadeau.tv/post/color-console-output-parallel-command/</link>
+      <link>https://www.nadeau.io/post/color-console-output-parallel-command/</link>
       <pubDate>Thu, 18 Jul 2019 16:20:00 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/color-console-output-parallel-command/</guid>
+      <guid>https://www.nadeau.io/post/color-console-output-parallel-command/</guid>
       <description>I&amp;rsquo;ve got a Lerna monorepos with a few microservices. I needed to run the dev version a few of these microservices so I decided to use parallel to run them all at the same time in my terminal:
 parallel --tagstring &amp;#39;{/}&amp;#39; --linebuffer &amp;#39;cd {} &amp;amp;&amp;amp; npm run dev&amp;#39; ::: packages/service-a packages/service-b packages/service-c This worked, but I noticed that the color output was stripped when doing this. This is really annoying. The color really helps during development to spot errors.</description>
     </item>
     
     <item>
       <title>SPF, DKIM, DMARC: What they do and what they don&#39;t</title>
-      <link>https://www.nadeau.tv/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</link>
+      <link>https://www.nadeau.io/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</link>
       <pubDate>Fri, 14 Jun 2019 15:54:31 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</guid>
+      <guid>https://www.nadeau.io/post/spf-dkim-dmarc-what-they-do-and-what-they-dont/</guid>
       <description>Email is such a mess of technologies and standards, it&amp;rsquo;s hard to understand how everything works together. When it comes to SPF, DKIM, DMARC, there are some misconceptions.
 The major misconception is around what SPF and DKIM actually do. Many people think that SPF and DKIM are somehow related to controlling who can send messages From your domain, but that&amp;rsquo;s not totally true.
 The first thing to understand is that there are two email addresses in an email:</description>
@@ -51,30 +51,30 @@ The first thing to understand is that there are two email addresses in an email:
     
     <item>
       <title>Configure a Hyper Key on OSX</title>
-      <link>https://www.nadeau.tv/post/configure-hyper-key-osx/</link>
+      <link>https://www.nadeau.io/post/configure-hyper-key-osx/</link>
       <pubDate>Tue, 28 Aug 2018 12:00:00 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/configure-hyper-key-osx/</guid>
+      <guid>https://www.nadeau.io/post/configure-hyper-key-osx/</guid>
       <description>If you&amp;rsquo;re anything like me, you like keyboard shortcuts. I like to set up custom shortcuts and macros to automate everything I can. The problem is that the most convenient keyboard combinations are already in use by the OS or by user applications.
 That&amp;rsquo;s where the Hyper Key (also sometimes called a Super Key) comes in. Basically: Get rid of the useless caps-lock key and turn it into a new modifier key that isn&amp;rsquo;t used by anything else.</description>
     </item>
     
     <item>
       <title>Nginx proxy_pass DNS Cache</title>
-      <link>https://www.nadeau.tv/post/nginx-proxy_pass-dns-cache/</link>
+      <link>https://www.nadeau.io/post/nginx-proxy_pass-dns-cache/</link>
       <pubDate>Fri, 31 Mar 2017 10:00:12 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/nginx-proxy_pass-dns-cache/</guid>
+      <guid>https://www.nadeau.io/post/nginx-proxy_pass-dns-cache/</guid>
       <description>We use nginx to proxy to an Amazon S3 bucket to serve static content to customers. Yesterday, I noticed a high failure rate through the proxy but I couldn&amp;rsquo;t figure out why.
 After some debugging, I finally discovered that the IP address nginx was hitting was different from the one that DNS was returning. It turns out that nginx resolves hostnames only once on load, meaning whatever IP address it got on load would stick around until reload.</description>
     </item>
     
     <item>
       <title>pt-online-schema-change error &#34;Error creating new table ... duplicate key&#34;</title>
-      <link>https://www.nadeau.tv/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</link>
+      <link>https://www.nadeau.io/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</link>
       <pubDate>Thu, 16 Jun 2016 16:11:04 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</guid>
+      <guid>https://www.nadeau.io/post/pt-online-schema-change-error-error-creating-new-table-duplicate-key/</guid>
       <description>pt-online-schema-change is a tool in the Percona Toolkit which allows you to make large table alters without locking the database.
 Newer versions of MySQL have Online DDL which reduce the need for this tool. But if you&amp;rsquo;re like us, pt-online-schema-change is still very valuable because we use Galera. Running a DDL query on a Galera cluster blocks the entire cluster (even other databases in the same cluster).
 I&amp;rsquo;ve successfully used pt-online-schema-change in the past with great success.</description>
@@ -82,20 +82,20 @@ I&amp;rsquo;ve successfully used pt-online-schema-change in the past with great 
     
     <item>
       <title>Quickie: Prevent Mac apps from quitting when last window is closed</title>
-      <link>https://www.nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</link>
+      <link>https://www.nadeau.io/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</link>
       <pubDate>Thu, 03 Mar 2016 10:29:18 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</guid>
+      <guid>https://www.nadeau.io/post/quickie-prevent-osx-from-closing-when-last-window-is-closed/</guid>
       <description>There are a few apps on OSX that quit/terminate once their window is closed. This is typical on Windows of course, but it&amp;rsquo;s a bit random on OSX. Some (most?) apps stay open, and some close. I find it really bloody annoying. I&amp;rsquo;ll quit my apps when I&amp;rsquo;m ready to quit them, thank you very much.
 The biggest sore spot with me is 1password which I use dozens of times a day, and every time I CMD+W to close the window (muscle memory!</description>
     </item>
     
     <item>
       <title>Quickie: Quickly rename MySQL database</title>
-      <link>https://www.nadeau.tv/post/quickie-quickly-rename-mysql-database/</link>
+      <link>https://www.nadeau.io/post/quickie-quickly-rename-mysql-database/</link>
       <pubDate>Wed, 02 Mar 2016 17:42:43 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/quickie-quickly-rename-mysql-database/</guid>
+      <guid>https://www.nadeau.io/post/quickie-quickly-rename-mysql-database/</guid>
       <description>There&amp;rsquo;s no way to rename a MySQL database. Typical advice is to dump/restore the database, but this is obviously very slow if you have a huge database.
 I found a solution today. Create your database, then execute this one-line:
 mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -u username -ppassword -sNe &amp;quot;rename table OLD_DB.$t to NEW_DB.$t&amp;quot;; done  Obviously replace the params as necessary.
@@ -104,10 +104,10 @@ mysql -uUSER -pPASS OLD_DB -sNe &#39;SHOW TABLES&#39; | while read t; do mysql -
     
     <item>
       <title>SSH with a Bastion Host</title>
-      <link>https://www.nadeau.tv/post/ssh-with-a-bastion-host/</link>
+      <link>https://www.nadeau.io/post/ssh-with-a-bastion-host/</link>
       <pubDate>Sat, 27 Feb 2016 13:33:16 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/ssh-with-a-bastion-host/</guid>
+      <guid>https://www.nadeau.io/post/ssh-with-a-bastion-host/</guid>
       <description>A bastion host is a server that sits on a public network whose sole purpose is to provide access to an inner private network.
 For example, if you use AWS and have instances on a private VPC subnet, then the only way you can gain SSH access to them is to use a bastion host as a kind of proxy.
 You &amp;gt; Bastion &amp;gt; Server  For the best security, you typically have SSH configured for key-only authentication.</description>
@@ -115,10 +115,10 @@ You &amp;gt; Bastion &amp;gt; Server  For the best security, you typically have 
     
     <item>
       <title>AWS VPC Network Structure</title>
-      <link>https://www.nadeau.tv/post/aws-vpc-network-structure/</link>
+      <link>https://www.nadeau.io/post/aws-vpc-network-structure/</link>
       <pubDate>Sat, 27 Feb 2016 13:32:41 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/aws-vpc-network-structure/</guid>
+      <guid>https://www.nadeau.io/post/aws-vpc-network-structure/</guid>
       <description>I recently started playing around with AWS. One of the really cool things about AWS is the Virtual Private Cloud (VPC) features. By creating a VPC, you create a private network for yourself complete with NAT gateways, custom route tables, firewalls and more.
 VPC Components A VPC is made up of several main components:
 CIDR Block
@@ -127,10 +127,10 @@ When you create your VPC, you are asked to define a CIDR block, which is the ran
     
     <item>
       <title>Setting up a new MySQL slave database via steaming xtrabackup</title>
-      <link>https://www.nadeau.tv/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/</link>
+      <link>https://www.nadeau.io/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/</link>
       <pubDate>Wed, 27 Jan 2016 18:16:45 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/</guid>
+      <guid>https://www.nadeau.io/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/</guid>
       <description>The goal today is to build a new MySQL slave database off an existing database. We&amp;rsquo;ll use Percona&amp;rsquo;s xtrabackup to stream a hot backup over the wire to a new machine, while keeping the existing server online.
 Prep Install MySQL on New Server
 Install MySQL in the way you normally would (e.g., apt-get etc).
@@ -139,10 +139,10 @@ The only very important thing you need to do is edit my.cnf and set a server-id 
     
     <item>
       <title>Using NgModelController with Custom Directives</title>
-      <link>https://www.nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</link>
+      <link>https://www.nadeau.io/post/using-ngmodelcontroller-with-custom-directives/</link>
       <pubDate>Sat, 01 Feb 2014 15:38:00 +0000</pubDate>
       
-      <guid>https://www.nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/</guid>
+      <guid>https://www.nadeau.io/post/using-ngmodelcontroller-with-custom-directives/</guid>
       <description>Creating directives with AngularJS is fairly straightforward. But most directives also need to interact with a model which represents their state. You could bake in your own custom model handling, but you can also plug right in to AngularJS&amp;rsquo;s own NgModelController &amp;ndash; the same ng-model that is used for things like input boxes and select menus.
  Example directive: &amp;lt;time-duration /&amp;gt; As a simple example, let&amp;rsquo;s build a directive where the user can input a duration using one of many possible units of time.</description>
     </item>

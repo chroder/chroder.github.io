@@ -4,11 +4,11 @@
     <title>AWS VPC Network Structure // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -24,16 +24,16 @@ VPC Components A VPC is made up of several main components:
 CIDR Block
 When you create your VPC, you are asked to define a CIDR block, which is the range of IP addresses you want your VPC to use." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/aws-vpc-network-structure/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2016-02-27T13:32:41&#43;00:00" />
-<meta property="article:modified_time" content="2016-02-27T13:32:41&#43;00:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/aws-vpc-network-structure/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-02-27T13:32:41+00:00" />
+<meta property="article:modified_time" content="2016-02-27T13:32:41+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -91,7 +91,7 @@ When you create your VPC, you are asked to define a CIDR block, which is the ran
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://www.nadeau.tv/tags/aws/">AWS</a>
+              <a class="tag" href="https://www.nadeau.io/tags/aws/">AWS</a>
         </div>
       </div>
     </header>
@@ -191,7 +191,7 @@ When you create your VPC, you are asked to define a CIDR block, which is the ran
 <h2 id="ssh-and-bastion-hosts">SSH and Bastion Hosts</h2>
 <p>EC2 instances by default use key files to authenticate SSH sessions. Obviously you want to keep this as it&rsquo;s the most secure method.</p>
 <p>But this presents a problem. You can connect to your bastion server with a key &ndash; that&rsquo;s fine. But then your bastion server needs to have the keys to connect to every other server on your VPC private network. In other words, your bastion server has the keys to everything. That&rsquo;s not so good.</p>
-<p>The best way I&rsquo;ve found to square this problem is to use SSH proxying. I&rsquo;ve got another article about that here: <a href="https://www.nadeau.tv/ssh-with-a-bastion-host/">SSH with a bastion host</a>.</p>
+<p>The best way I&rsquo;ve found to square this problem is to use SSH proxying. I&rsquo;ve got another article about that here: <a href="https://www.nadeau.io/ssh-with-a-bastion-host/">SSH with a bastion host</a>.</p>
 
     </div>
     <div class="post-footer">

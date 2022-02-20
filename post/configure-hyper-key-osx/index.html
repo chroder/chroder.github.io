@@ -4,11 +4,11 @@
     <title>Configure a Hyper Key on OSX // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -20,16 +20,16 @@ That&rsquo;s where the Hyper Key (also sometimes called a Super Key) comes in. B
 <meta property="og:description" content="If you&rsquo;re anything like me, you like keyboard shortcuts. I like to set up custom shortcuts and macros to automate everything I can. The problem is that the most convenient keyboard combinations are already in use by the OS or by user applications.
 That&rsquo;s where the Hyper Key (also sometimes called a Super Key) comes in. Basically: Get rid of the useless caps-lock key and turn it into a new modifier key that isn&rsquo;t used by anything else." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/configure-hyper-key-osx/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2018-08-28T12:00:00&#43;00:00" />
-<meta property="article:modified_time" content="2018-08-28T12:00:00&#43;00:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/configure-hyper-key-osx/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-08-28T12:00:00+00:00" />
+<meta property="article:modified_time" content="2018-08-28T12:00:00+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -87,7 +87,7 @@ That&rsquo;s where the Hyper Key (also sometimes called a Super Key) comes in. B
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://www.nadeau.tv/tags/productivity/">Productivity</a>
+              <a class="tag" href="https://www.nadeau.io/tags/productivity/">Productivity</a>
         </div>
       </div>
     </header>
@@ -110,35 +110,30 @@ That&rsquo;s where the Hyper Key (also sometimes called a Super Key) comes in. B
 <li>In the <em>Rules</em> section, click the <em>Add rule</em> button at the bottom left of the window.</li>
 <li>One of default example rules is the one we want. Click <em>Enable</em> next to the example <em>Change caps lock to&hellip;</em> rule.</li>
 </ul>
-<figure>
-    <img src="/post-files/configure-hyper-key-osx/image.png" width="93%"/> 
+<figure><img src="/post-files/configure-hyper-key-osx/image.png" width="93%"/>
 </figure>
 
 <h2 id="test-it-out">Test it out</h2>
 <p>At this point, whenever you hold your caps lock key, it&rsquo;s the same as if you were pressing <code>CMD+CTRL+OPTION+SHIFT</code>.</p>
 <p>You can test this out with the <em>EventViewer</em>. From your Menu Bar, click the Karabiner-Elements icon and select <em>EventViewer.</em></p>
-<figure>
-    <img src="/post-files/configure-hyper-key-osx/image-2.png" width="93%"/> 
+<figure><img src="/post-files/configure-hyper-key-osx/image-2.png" width="93%"/>
 </figure>
 
 <h2 id="practical-applications">Practical Applications</h2>
 <p>Now it&rsquo;s up to you how you want to actually use this key. You can begin using it right away by just assigning the key to macOS keyboard combinations.</p>
 <p>From <em>System Preferences &gt; Keyboard</em>, go to the <em>Shortcuts</em> tab. From here you can assign keyboard shortcuts to standard macOS features; but you can also go to &ldquo;App Shortcuts&rdquo; and set or override shortcuts on any menu item in specific apps.</p>
 <p>For example, in PathFinder, you can save a certain window configuration (tabs etc) and it appears in the File menu. That means I can assign a key combo to it.</p>
-<figure>
-    <img src="/post-files/configure-hyper-key-osx/image-3.png" width="93%"/> 
+<figure><img src="/post-files/configure-hyper-key-osx/image-3.png" width="93%"/>
 </figure>
 
-<figure>
-    <img src="/post-files/configure-hyper-key-osx/image-5.png" width="93%"/> 
+<figure><img src="/post-files/configure-hyper-key-osx/image-5.png" width="93%"/>
 </figure>
 
 <h2 id="keyboard-maestro">Keyboard Maestro</h2>
 <p>If you want to get even more out of your new hyper key, check out <a href="https://www.keyboardmaestro.com/main/">Keyboard Maestro</a>.</p>
 <p>KM is an amazing automation machine. You define macros (i.e. series of actions to perform) in response to a variety of events – including key combinations.</p>
 <p>For example, I have <code>SUPER+V</code> assigned to &ldquo;Paste without formatting&rdquo; that I use dozens of times a day.</p>
-<figure>
-    <img src="/post-files/configure-hyper-key-osx/image-6.png" width="93%"/> 
+<figure><img src="/post-files/configure-hyper-key-osx/image-6.png" width="93%"/>
 </figure>
 
 

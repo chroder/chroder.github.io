@@ -4,11 +4,11 @@
     <title>Nginx proxy_pass DNS Cache // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -20,16 +20,16 @@ After some debugging, I finally discovered that the IP address nginx was hitting
 <meta property="og:description" content="We use nginx to proxy to an Amazon S3 bucket to serve static content to customers. Yesterday, I noticed a high failure rate through the proxy but I couldn&rsquo;t figure out why.
 After some debugging, I finally discovered that the IP address nginx was hitting was different from the one that DNS was returning. It turns out that nginx resolves hostnames only once on load, meaning whatever IP address it got on load would stick around until reload." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/nginx-proxy_pass-dns-cache/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2017-03-31T10:00:12&#43;00:00" />
-<meta property="article:modified_time" content="2017-03-31T10:00:12&#43;00:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/nginx-proxy_pass-dns-cache/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2017-03-31T10:00:12+00:00" />
+<meta property="article:modified_time" content="2017-03-31T10:00:12+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -90,7 +90,7 @@ After some debugging, I finally discovered that the IP address nginx was hitting
 <p>So Amazon updated DNS for the S3 endpoint for our bucket but we were still using the old one (which was apparently failing).</p>
 <h2 id="dynamic-proxy_pass">Dynamic <code>proxy_pass</code></h2>
 <p>Here&rsquo;s how the directive might look:</p>
-<pre><code>server {
+<pre tabindex="0"><code>server {
   listen 80;
   server_name files.example.com;
 
@@ -108,7 +108,7 @@ After some debugging, I finally discovered that the IP address nginx was hitting
 </blockquote>
 <p>Meaning if we change <code>proxy_pass</code> to use a variable instead, then nginx will be forced to resolve it using a resolver which will work how we want (i.e. DNS TTLs will work).</p>
 <p>Here&rsquo;s what the &ldquo;fixed&rdquo; block looks like:</p>
-<pre><code>server {
+<pre tabindex="0"><code>server {
   listen 80;
   server_name files.example.com;
 

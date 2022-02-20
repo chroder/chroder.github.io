@@ -4,11 +4,11 @@
     <title>Using NgModelController with Custom Directives // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -20,16 +20,16 @@
 <meta property="og:description" content="Creating directives with AngularJS is fairly straightforward. But most directives also need to interact with a model which represents their state. You could bake in your own custom model handling, but you can also plug right in to AngularJS&rsquo;s own NgModelController &ndash; the same ng-model that is used for things like input boxes and select menus.
  Example directive: &lt;time-duration /&gt; As a simple example, let&rsquo;s build a directive where the user can input a duration using one of many possible units of time." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/using-ngmodelcontroller-with-custom-directives/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2014-02-01T15:38:00&#43;00:00" />
-<meta property="article:modified_time" content="2014-02-01T15:38:00&#43;00:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/using-ngmodelcontroller-with-custom-directives/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2014-02-01T15:38:00+00:00" />
+<meta property="article:modified_time" content="2014-02-01T15:38:00+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -87,8 +87,8 @@
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://www.nadeau.tv/tags/javascript/">Javascript</a>
-              <a class="tag" href="https://www.nadeau.tv/tags/angularjs/">AngularJS</a>
+              <a class="tag" href="https://www.nadeau.io/tags/javascript/">Javascript</a>
+              <a class="tag" href="https://www.nadeau.io/tags/angularjs/">AngularJS</a>
         </div>
       </div>
     </header>
@@ -97,7 +97,7 @@
 <hr>
 <h2 id="example-directive-time-duration-">Example directive: <code>&lt;time-duration /&gt;</code></h2>
 <p>As a simple example, let&rsquo;s build a directive where the user can input a duration using one of many possible units of time.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">h3</span>&gt;My Super App&lt;/<span style="color:#ff79c6">h3</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">h3</span>&gt;My Super App&lt;/<span style="color:#ff79c6">h3</span>&gt;
 How often should we email you?
 &lt;<span style="color:#ff79c6">time-duration</span> <span style="color:#50fa7b">ng-mode</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;email_notify_pref&#34;</span> /&gt;
 </code></pre></div><p>Our directive will render as two input fields:</p>
@@ -111,7 +111,7 @@ How often should we email you?
 <p>Once you understand how this basic workflow of parsers and formatters happen, you will be able to build all kinds of directives, even if they are backed by very complex models.</p>
 <h2 id="the-setup">The setup</h2>
 <p>Let&rsquo;s start by defining the directive:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#8be9fd;font-style:italic">function</span> TimeDurationDirective() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#8be9fd;font-style:italic">function</span> TimeDurationDirective() {
     <span style="color:#8be9fd;font-style:italic">var</span> tpl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&lt;div&gt; \
 </span><span style="color:#f1fa8c">        &lt;input type=&#39;text&#39; ng-model=&#39;num&#39; size=&#39;80&#39; /&gt; \
 </span><span style="color:#f1fa8c">        &lt;select ng-model=&#39;unit&#39;&gt; \
@@ -137,12 +137,12 @@ angular.module(<span style="color:#f1fa8c">&#39;myModule&#39;</span>).directive(
 </code></pre></div><p>So far this is just a really simple directive that does nothing yet except render that HTML template which shows an input box (where the user inputs a numeric value) and a select box (where the user selects a unit of time).</p>
 <h3 id="require-ngmodel"><code>require: 'ngModel'</code></h3>
 <p>The only &ldquo;special&rdquo; bit about this directive is the <a href="http://docs.angularjs.org/api/ng.$compile#description_comprehensive-directive-api_directive-definition-object">require</a> property. The <code>require</code> property tells Angular that our directive requires the controller of another directive. In our case, we want to use the <code>ngModel</code> controller:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">time-duration</span> <span style="color:#50fa7b">ng-model</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;email_notify_pref&#34;</span> /&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">time-duration</span> <span style="color:#50fa7b">ng-model</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;email_notify_pref&#34;</span> /&gt;
 </code></pre></div><p>When you require a controller, that controller is passed in to the <code>link</code> function as the final parameter (in the example above, it&rsquo;s <code>ngModelCtrl</code>). We are &ldquo;linking&rdquo; our timeDuration directive and the ngModel directive together.</p>
 <p>It&rsquo;s worth noting that <code>require</code> has two special syntax rules that may come in handy depending on the directive you are building:</p>
 <p><strong>Require a parent controller: <code>require: '^someController'</code></strong></p>
 <p>If you don&rsquo;t need the controller specified on your directive specifically, you can use the caret symbol that tells Angular to search up the DOM tree until it finds it. This is useful if you are creating a structure of related directives that work together. For example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#ff79c6">&lt;my-directive</span> <span style="color:#50fa7b">ng-model=</span><span style="color:#f1fa8c">&#34;myModel&#34;</span><span style="color:#ff79c6">&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#ff79c6">&lt;my-directive</span> <span style="color:#50fa7b">ng-model=</span><span style="color:#f1fa8c">&#34;myModel&#34;</span><span style="color:#ff79c6">&gt;</span>
     <span style="color:#ff79c6">&lt;other-directive&gt;&lt;/other-directive&gt;</span>
 <span style="color:#ff79c6">&lt;/my-directive&gt;</span>
 </code></pre></div><p>We could use <code>require: '^ngModel'</code> on <code>otherDirective</code> and it would grab the model controller of the parent element.</p>
@@ -160,7 +160,7 @@ angular.module(<span style="color:#f1fa8c">&#39;myModule&#39;</span>).directive(
 <h3 id="working-with-ngmodelcontroller">Working with <code>NgModelController</code></h3>
 <p>We briefly covered the role of <code>NgModelController</code> but let&rsquo;s get a bit more specific and think it through a piece at a time.</p>
 <p>Before going further, let&rsquo;s refresh ourselves with what our link function looks like so far:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">link<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(scope, iElement, iAttrs, ngModelCtrl) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">link<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(scope, iElement, iAttrs, ngModelCtrl) {
     <span style="color:#6272a4">//TODO
 </span><span style="color:#6272a4"></span>}
 </code></pre></div><p><code>scope</code> is the scope that is tied to our HTML template, <code>iElement</code> is the actual HTML DOM element, <code>iAttrs</code> are the attributes of the original directive HTML, and <code>ngModelCtrl</code> is an instance of the required <code>NgModelController</code>.</p>
@@ -175,10 +175,10 @@ angular.module(<span style="color:#f1fa8c">&#39;myModule&#39;</span>).directive(
 <h4 id="the-formatters-pipeline">The <code>$formatters</code> pipeline</h4>
 <p>The first piece of the puzzle is how to convert a real model value into a value our view can use. In our example, this means turning <code>3600</code> into <code>1 hour</code>.</p>
 <p>The first step is to decide on a data structure that our view (<code>ngModelCtrl.$viewValue</code>) will use. For us, that&rsquo;s pretty simple as it&rsquo;s dictated by our form in the HTML template. We have two fields: an input box for a number and a select box for a unit of time. The easiest way to store this is as an object with two properties. So, in your mind let&rsquo;s say <code>$viewValue</code> looks like this (this isn&rsquo;t relevant, working code yet. It&rsquo;s just to paint a picture in your mind):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">$viewValue <span style="color:#ff79c6">=</span> { num<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, unit<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;hours&#34;</span> };
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">$viewValue <span style="color:#ff79c6">=</span> { num<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, unit<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;hours&#34;</span> };
 </code></pre></div><p>So how do we make this a reality? <code>NgModelController</code> does this by passing the real model value through an array of <code>$formatters</code> which are just functions that take the model value and return a transformed view value. The value ultimately assigned to <code>$viewValue</code> is whatever the last return value is. (In most cases, you will probably only ever have a single formatter).</p>
 <p>Our link function becomes something like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">link<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(scope, iElement, iAttrs, ngModelCtrl) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">link<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(scope, iElement, iAttrs, ngModelCtrl) {
 
     <span style="color:#6272a4">// Units of time
 </span><span style="color:#6272a4"></span>    multiplierMap <span style="color:#ff79c6">=</span> {seconds<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, minutes<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">60</span>, hours<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">3600</span>, days<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">86400</span>};
@@ -210,9 +210,9 @@ angular.module(<span style="color:#f1fa8c">&#39;myModule&#39;</span>).directive(
     });
 }
 </code></pre></div><p>This is a bit long-winded just because of the simple boilerplate to perform the maths that turn a number like 3600 into &lsquo;1 hour&rsquo;. But you see how we add a function to the <code>$formatters</code> pipeline:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">ngModelCtrl.$formatters.push(<span style="color:#8be9fd;font-style:italic">function</span>() {...});
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">ngModelCtrl.$formatters.push(<span style="color:#8be9fd;font-style:italic">function</span>() {...});
 </code></pre></div><p>And then within that formatter function, we have returned the value that eventually gets set on <code>$viewValue</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">return</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">return</span> {
     unit<span style="color:#ff79c6">:</span> unit,
     num<span style="color:#ff79c6">:</span>  num
 };
@@ -227,14 +227,14 @@ $viewValue = { unit: 'hours', num: 1}
 <p>Now we need a way of rendering the value in <code>$viewValue</code> to the browser screen. This is done by implementing a <code>ngModelCtrl.$render</code>.</p>
 <p>In our case, we are using the directive scope in our template to bind values to the form. This means we can just update values on the scope. But if you weren&rsquo;t using the scope, you&rsquo;d do any kind of DOM updates here instead. For example, maybe you want to create some fancy directive that wraps a jQuery widget. You&rsquo;d need to do any jQuery calls in this render method.</p>
 <p>Here&rsquo;s our really simple render method assigning the view value to the scope variables we used in our HTML template:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">ngModelCtrl.$render <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">ngModelCtrl.$render <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
     scope.unit <span style="color:#ff79c6">=</span> ngModelCtrl.$viewValue.unit;
     scope.num  <span style="color:#ff79c6">=</span> ngModelCtrl.$viewValue.num;
 };
 </code></pre></div><h4 id="the-parsers-pipeline">The <code>$parsers</code> Pipeline</h4>
 <p>In a similar way that we have the <code>$formatters</code> pipeline that converts a model value into the <code>$viewValue</code>, we have the <code>$parsers</code> pipeline that converts the <code>$viewValue</code> into the <code>$modelValue</code> (which eventually gets assigned back to the real model).</p>
 <p>We just push our custom function on to the pipeline:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">ngModelCtrl.$parsers.push(<span style="color:#8be9fd;font-style:italic">function</span>(viewValue) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">ngModelCtrl.$parsers.push(<span style="color:#8be9fd;font-style:italic">function</span>(viewValue) {
     <span style="color:#8be9fd;font-style:italic">var</span> unit <span style="color:#ff79c6">=</span> viewValue.unit, num <span style="color:#ff79c6">=</span> viewValue.num, multiplier;
 
     <span style="color:#6272a4">// Remember multiplierMap was defined above
@@ -253,11 +253,11 @@ $modelValue = 3600;
 <h4 id="updating-viewvalue-when-the-ui-changes">Updating <code>$viewValue</code> when the UI changes</h4>
 <p>The last piece of the puzzle is to make sure we are updating <code>$viewValue</code> when the values in the UI change. We do this by executing <code>ngModelCtrl.$setViewValue()</code> when the value changes.</p>
 <p>How do we know when the value changes? That depends entirely on your directive. This is easy in our case because we are using bound variables on the directive scope so we can just set a watch like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">scope.$watch(<span style="color:#f1fa8c">&#39;unit + num&#39;</span>, <span style="color:#8be9fd;font-style:italic">function</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">scope.$watch(<span style="color:#f1fa8c">&#39;unit + num&#39;</span>, <span style="color:#8be9fd;font-style:italic">function</span>() {
     ngModelCtrl.$setViewValue({ unit<span style="color:#ff79c6">:</span> scope.unit, num<span style="color:#ff79c6">:</span> scope.num });
 });
 </code></pre></div><p>But you can call this however you like. For example, maybe you are using jQuery and you want to listen for a change event on some select box:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">$(iElement).find(<span style="color:#f1fa8c">&#39;select&#39;</span>).on(<span style="color:#f1fa8c">&#39;change&#39;</span>, <span style="color:#8be9fd;font-style:italic">function</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">$(iElement).find(<span style="color:#f1fa8c">&#39;select&#39;</span>).on(<span style="color:#f1fa8c">&#39;change&#39;</span>, <span style="color:#8be9fd;font-style:italic">function</span>() {
     ngModelCtrl.$setViewValue(...);
 });
 </code></pre></div><h4 id="visualising-the-full-circle">Visualising the full circle</h4>
@@ -271,7 +271,7 @@ ngModelCtrl.$parsers(newViewModel)    ←    $setViewModel(newViewModel)
 </code></pre>
 <h2 id="the-full-directive">The full directive</h2>
 <p>Putting it all together, the full directive looks something like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#8be9fd;font-style:italic">function</span> TimeDurationDirective() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#8be9fd;font-style:italic">function</span> TimeDurationDirective() {
     <span style="color:#8be9fd;font-style:italic">var</span> tpl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&lt;div&gt; \
 </span><span style="color:#f1fa8c">        &lt;input type=&#39;text&#39; ng-model=&#39;num&#39; size=&#39;80&#39; /&gt; \
 </span><span style="color:#f1fa8c">        &lt;select ng-model=&#39;unit&#39;&gt; \

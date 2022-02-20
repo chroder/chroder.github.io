@@ -4,11 +4,11 @@
     <title>Fast Integration Tests with MySQL // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="How I used triggers to speed up integration tests run against MySQL" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -18,16 +18,16 @@
     <meta property="og:title" content="Fast Integration Tests with MySQL" />
 <meta property="og:description" content="How I used triggers to speed up integration tests run against MySQL" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/fast-integration-tests-with-mysql/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-03-23T00:00:00&#43;00:00" />
-<meta property="article:modified_time" content="2021-03-23T00:00:00&#43;00:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/fast-integration-tests-with-mysql/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-03-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-03-23T00:00:00+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -85,7 +85,7 @@
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://www.nadeau.tv/tags/engineering/">Engineering</a>
+              <a class="tag" href="https://www.nadeau.io/tags/engineering/">Engineering</a>
         </div>
       </div>
     </header>
@@ -95,7 +95,7 @@
 <h2 id="resetting-the-db-between-tests">Resetting the DB between tests</h2>
 <p>To ensure tests aren&rsquo;t too fragile, early on we added a <a href="https://jestjs.io/docs/setup-teardown"><code>beforeAll</code></a> routine that reset the database between each suite.</p>
 <p>To reset the database, we were basically doing this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># reset.sh</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># reset.sh</span>
 mysql -e <span style="color:#f1fa8c">&#39;DROP DATABASE test;&#39;</span>
 mysql -e <span style="color:#f1fa8c">&#39;CREATE DATABASE test;&#39;</span>
 mysql <span style="color:#8be9fd;font-style:italic">test</span> &lt; fixtures.sql
@@ -125,7 +125,7 @@ re-seed those tables from the copies.</li>
 <h3 id="in-practice">In Practice</h3>
 <p>I created a Laravel command to &ldquo;install test helpers&rdquo;. This reads the schema and creates the necessary triggers on each table, then creates the necessary copy, and then also creates a special stored procedure to handle resetting the tables after each test.</p>
 <p>Here&rsquo;s what it looks like:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-php" data-lang="php"><span style="color:#ff79c6">&lt;?</span>php
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-php" data-lang="php"><span style="color:#ff79c6">&lt;?</span>php
 
 <span style="color:#ff79c6">namespace</span> App\Console\Commands\Test;
 
@@ -246,9 +246,9 @@ re-seed those tables from the copies.</li>
     }
 }
 </code></pre></div><p>All you need to do is have the test runner execute the special <code>_testRefillFromSeed</code> stored procedure after ever test. In our case, we had an env var that contained the reset command and it was just a matter of setting it:</p>
-<pre><code>DB_RESET_CMD=&quot;mysql test -N -B -e 'CALL _testRefillFromSeed();'&quot;
+<pre tabindex="0"><code>DB_RESET_CMD=&quot;mysql test -N -B -e 'CALL _testRefillFromSeed();'&quot;
 </code></pre><p>And from the Jest side looks a little like</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">import</span> { spawnSync } from <span style="color:#f1fa8c">&#39;child_process&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">import</span> { spawnSync } from <span style="color:#f1fa8c">&#39;child_process&#39;</span>;
 beforeAll(() =&gt; {
   <span style="color:#ff79c6">const</span> options <span style="color:#ff79c6">=</span> {
     shell<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>,

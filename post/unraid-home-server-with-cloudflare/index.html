@@ -4,11 +4,11 @@
     <title>Secure home server with Unraid and Cloudflare // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="How I set up my Unraid home server with Cloudflare to allow secure remote access" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -18,16 +18,16 @@
     <meta property="og:title" content="Secure home server with Unraid and Cloudflare" />
 <meta property="og:description" content="How I set up my Unraid home server with Cloudflare to allow secure remote access" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/unraid-home-server-with-cloudflare/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2020-08-08T00:00:00&#43;01:00" />
-<meta property="article:modified_time" content="2020-08-08T00:00:00&#43;01:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/unraid-home-server-with-cloudflare/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-08-08T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-08-08T00:00:00+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -85,7 +85,7 @@
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://www.nadeau.tv/tags/tech/">Tech</a>
+              <a class="tag" href="https://www.nadeau.io/tags/tech/">Tech</a>
         </div>
       </div>
     </header>
@@ -157,17 +157,17 @@
 <li><a href="https://github.com/cloudflare/cloudflared"><code>cloudflared</code></a> &ndash; The daemon that establishes the tunnel with Cloudflare</li>
 <li><a href="https://github.com/ochinchina/supervisord"><code>supervisord</code></a> &ndash; A process manager that we can use to make sure cloudflared is always running and gets restarted in the event of a crash. The linked project here is a golang implementation of supervisord because I wanted a single-binary to copy, rather than the original version written in Python.</li>
 </ul>
-<p>I&rsquo;ve taken the liberty of creating a tarball of everything you need here: <a href="https://nadeau.tv/post-files/unraid-cloudflare/custom.tgz">https://nadeau.tv/post-files/unraid-cloudflare/custom.tgz</a></p>
+<p>I&rsquo;ve taken the liberty of creating a tarball of everything you need here: <a href="https://nadeau.io/post-files/unraid-cloudflare/custom.tgz">https://nadeau.io/post-files/unraid-cloudflare/custom.tgz</a></p>
 <p>You need to install these files to <code>/boot/config/custom</code>.</p>
 <blockquote>
 <p>You can&rsquo;t install it to a user mount because we need it to run even if the Unraid array is offline, and you can&rsquo;t install it anywhere else on the filesystem because the rest of the filesystem is reset after each reboot.</p>
 </blockquote>
 <p>So here&rsquo;s an example SSH session:</p>
-<pre><code>cd /boot/config
-curl -L https://nadeau.tv/post-files/unraid-cloudflare/custom.tgz -o custom.tgz
+<pre tabindex="0"><code>cd /boot/config
+curl -L https://nadeau.io/post-files/unraid-cloudflare/custom.tgz -o custom.tgz
 tar zxvf custom.tgz
 </code></pre><p>Which will extract to:</p>
-<pre><code>* /boot/config/custom
+<pre tabindex="0"><code>* /boot/config/custom
 	* /cloudflared
 		* cert.pem
 		* cloudflared
@@ -181,12 +181,12 @@ tar zxvf custom.tgz
 <li><code>unraid.YOUR_HOST_NAME.com</code> &ndash; the <code>unraid</code> sub-domain will be used for HTTP(S) connections (that will go through to Traefik, which is described below)</li>
 <li><code>ssh.YOUR_HOST_NAME.com</code> &ndash; the <code>ssh</code> sub-domain will be used for SSH, so you can always SSH into the box remotely.</li>
 </ul>
-<pre><code>cd /boot/config/supervisord
+<pre tabindex="0"><code>cd /boot/config/supervisord
 nano supervisord.conf
 </code></pre><p>When done, press <code>Ctrl+O</code> to write the file, followed by <code>Ctrl+X</code> to exit the nano editor.</p>
 <h3 id="initiate-the-domain-with-cloudflare">Initiate the domain with Cloudflare</h3>
 <p>Still connected via SSH, execute:</p>
-<pre><code>cd /boot/config/cloudflared
+<pre tabindex="0"><code>cd /boot/config/cloudflared
 cloudflared tunnel login
 </code></pre><ul>
 <li>The command will output a URL you need to copy+paste into your browser</li>
@@ -194,22 +194,22 @@ cloudflared tunnel login
 <li>And then click on the domain you added to Cloudflare before.</li>
 </ul>
 <p>After you finish, you should see something like this in your terminal:</p>
-<pre><code>You have successfully logged in.
+<pre tabindex="0"><code>You have successfully logged in.
 If you wish to copy your credentials to a server, they have been saved to:
 /root/.cloudflared/cert.pem
 </code></pre><p>Move the filename dislpayed here to <code>/boot/config/custom/cloudflared/cert.pem</code>. For example:</p>
-<pre><code>mv /root/.cloudflared/cert.pem /boot/config/custom/cloudflared/cert.pem
+<pre tabindex="0"><code>mv /root/.cloudflared/cert.pem /boot/config/custom/cloudflared/cert.pem
 </code></pre><h3 id="test-the-tunnel">Test the tunnel</h3>
 <p>It&rsquo;s a good idea to test out the tunnel now. Let&rsquo;s test out the SSH tunnel by starting it in the foreground:</p>
-<pre><code>cd /boot/config/cloudflared
+<pre tabindex="0"><code>cd /boot/config/cloudflared
 cloudflared --origincert cert.pem --no-tls-verify --hostname ssh.YOUR_HOST_NAME.com --url ssh://localhost:22
 </code></pre><p>You&rsquo;ll see a bunch of output but after a few seconds, you <em>should</em> be able to open a SSH connection <em>through</em> <code>ssh.YOUR_HOST_NAME.com</code> (e.g. open another terminal window and try it out). You should have already created a policy for the <code>ssh</code> sub-domain in a previous step; so when you try to SSH through this host now, you <em>should</em> have to log-in via the Cloudflare Access web UI before the connection is allowed.</p>
 <h3 id="install-boot-script">Install boot script</h3>
 <p>Now you need to edit <code>/boot/config/go</code> which is a Bash script that Unraid executes automatically whenever the server boots up. You&rsquo;ll need to <em>add</em> a few lines to this script to make sure supervisord runs at boot.</p>
-<pre><code>cd /boot/config
+<pre tabindex="0"><code>cd /boot/config
 nano go
 </code></pre><p>And then at the <em>bottom of the file</em> add these lines:</p>
-<pre><code>cp -R /boot/config/custom /root
+<pre tabindex="0"><code>cp -R /boot/config/custom /root
 chmod +x /root/custom/cloudflared/cloudflared
 chmod +x /root/custom/supervisord/supervisord
 
@@ -228,9 +228,9 @@ chmod +x /root/custom/supervisord/supervisord
 <p>The important change here is to make sure the 8080 is <code>80</code>, and 443 port is <code>443</code>. In other words, we want default HTTP(S) traffic going to Traefik.</p>
 <h3 id="edit-config">Edit config</h3>
 <p>Connect via SSH again, we&rsquo;re going to edit <code>/mnt/user/appdata/traefik/traefik.toml</code></p>
-<pre><code>nano /mnt/user/appdata/traefik/traefik.toml
+<pre tabindex="0"><code>nano /mnt/user/appdata/traefik/traefik.toml
 </code></pre><p>Make it look like this:</p>
-<pre><code>debug = true
+<pre tabindex="0"><code>debug = true
 logLevel = &quot;debug&quot;
 InsecureSkipVerify = false
 defaultEntryPoints = [&quot;https&quot;, &quot;http&quot;]

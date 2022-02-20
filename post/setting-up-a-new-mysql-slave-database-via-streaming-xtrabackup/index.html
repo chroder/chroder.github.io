@@ -4,11 +4,11 @@
     <title>Setting up a new MySQL slave database via steaming xtrabackup // Chris&#39; Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.82.0" />
+    <meta name="generator" content="Hugo 0.92.2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
     <meta name="twitter:card" content="summary"/>
@@ -24,16 +24,16 @@ Prep Install MySQL on New Server
 Install MySQL in the way you normally would (e.g., apt-get etc).
 The only very important thing you need to do is edit my.cnf and set a server-id for the server." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.tv/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2016-01-27T18:16:45&#43;00:00" />
-<meta property="article:modified_time" content="2016-01-27T18:16:45&#43;00:00" />
+<meta property="og:url" content="https://www.nadeau.io/post/setting-up-a-new-mysql-slave-database-via-streaming-xtrabackup/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-01-27T18:16:45+00:00" />
+<meta property="article:modified_time" content="2016-01-27T18:16:45+00:00" />
 
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
       <h1>Chris&#39; Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
@@ -91,7 +91,7 @@ The only very important thing you need to do is edit my.cnf and set a server-id 
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://www.nadeau.tv/tags/devops/">DevOps</a>
+              <a class="tag" href="https://www.nadeau.io/tags/devops/">DevOps</a>
         </div>
       </div>
     </header>
@@ -104,26 +104,26 @@ The only very important thing you need to do is edit my.cnf and set a server-id 
 <p><strong>Install xtrabackup on both servers</strong></p>
 <p>Both servers need to have <a href="https://www.percona.com/doc/percona-xtrabackup">xtrabackup</a>. If you use Debian, Ubuntu or CentOS, you&rsquo;re best off just using <a href="https://www.percona.com/doc/percona-xtrabackup/2.3/installation.html#installing-from-binaries">Percona&rsquo;s repositories</a>.</p>
 <p>For example, here&rsquo;s how I installed it on Ubuntu:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">$ wget -O /tmp/percona-repos.deb https://repo.percona.com/apt/percona-release_0.1-3.$(lsb_release -sc)_all.deb
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">$ wget -O /tmp/percona-repos.deb https://repo.percona.com/apt/percona-release_0.1-3.$(lsb_release -sc)_all.deb
 $ sudo dpkg -i /tmp/percona-repos.deb
 $ sudo apt-get update
 $ sudo apt-get install percona-xtrabackup
 </code></pre></div><p><strong>Create holding directory on new server</strong></p>
 <p>We&rsquo;ll shortly stream data from the existing server to the new server. You need a directory on the new server, so create it now:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@new# mkdir /root/mysql-data
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@new# mkdir /root/mysql-data
 </code></pre></div><blockquote>
 <p>Note: For the rest of this post, I&rsquo;ll use <code>new</code> to refer to the new slave you&rsquo;re setting up, and <code>old</code> to refer to the old, existing server.</p>
 </blockquote>
 <p><strong>Increase maximum number of open file descriptors</strong></p>
 <p>You <em>may</em> run into issues with too many files being open at once. This can happen if you have <em>many</em> databases, and/or if you use MySQL with one-file-per-table.</p>
 <p>In your console, before you run any commands (on both old/new servers), it&rsquo;s smart to raise the limit:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@example# ulimit -n 1024000
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@example# ulimit -n 1024000
 </code></pre></div><blockquote>
 <p>Note that this does NOT persist the change. It&rsquo;ll reset back to the system default as soon as you disconnect.</p>
 </blockquote>
 <h2 id="stream-a-hot-backup-no-downtime">Stream a hot backup (no downtime)</h2>
 <p>Now we start the stream from the old server to the new server. The general command looks something like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@old# innobackupex \
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@old# innobackupex \
     --no-lock \
     --user=root \
     --password=XXX \
@@ -141,13 +141,13 @@ $ sudo apt-get install percona-xtrabackup
 </ul>
 <h2 id="process-the-backup">Process the backup</h2>
 <p>After the stream finishes, you&rsquo;ll be left with a bunch of data in <code>/root/mysql-data</code>. This data isn&rsquo;t ready to use yet, we need to apply the binlogs that innobackupex was copying as it went:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@new# cd /root/mysql-data
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@new# cd /root/mysql-data
 root@new# innobackupex --apply-log .
 </code></pre></div><p>You also need to find the position info (we&rsquo;ll use it in a moment). Write down the contents of this file:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@new# cat /root/mysql-data/xtrabackup_binlog_pos_innodb
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@new# cat /root/mysql-data/xtrabackup_binlog_pos_innodb
 </code></pre></div><h2 id="move-data-files-into-place">Move data files into place</h2>
 <p>On the new server still, we now need to move the data files into the places where the MySQL server actually expects to find them. I typically move the old/default dirs into tmp just in case I need them for some reason.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@new# mv /var/lib/mysql /tmp/old-mysql-lib
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-txt" data-lang="txt">root@new# mv /var/lib/mysql /tmp/old-mysql-lib
 root@new# mv /var/log/mysql /tmp/old-mysq-log
 root@new# mv /root/mysql-data /var/lib/mysql
 root@new# mkdir /var/log/mysql
@@ -160,7 +160,7 @@ root@new# chown -R mysql:mysql /var/lib/mysql /var/log/mysql
 <h2 id="start-the-slave">Start the slave</h2>
 <p>At this point, your <code>new</code> server is set up and it has the data up until the point where the innobackupex command finished. The next step is making this a real slave, so it can begin to replicate off of a real master.</p>
 <p>Connect to the local mysql server on the new server (e.g., <code>mysql -uroot ...</code>). And we&rsquo;ll change the master and start the slave:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sql" data-lang="sql">CHANGE MASTER <span style="color:#ff79c6">TO</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sql" data-lang="sql">CHANGE MASTER <span style="color:#ff79c6">TO</span>
     MASTER_HOST<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;&lt;MASTER IP ADDRESS&gt;&#39;</span>,
     MASTER_USER<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;&lt;REPL USER&gt;&#39;</span>,
     MASTER_PASSWORD<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;&lt;REPL PASSWORD&gt;&#39;</span>,
@@ -168,7 +168,7 @@ root@new# chown -R mysql:mysql /var/lib/mysql /var/log/mysql
     MASTER_LOG_POS<span style="color:#ff79c6">=&lt;</span><span style="color:#ff79c6">POSITION</span> <span style="color:#ff79c6">FROM</span> xtrabackup_binlog_pos_innodb<span style="color:#ff79c6">&gt;</span>;
 </code></pre></div><p>Fill in the details for your master host, and be sure to double check the bin log file and position that you got before (from the <code>cat /root/mysql-data/xtrabackup_binlog_pos_innodb</code> we ran above).</p>
 <p>Then start the salve, wait a few seconds, and check the status to make sure it&rsquo;s running:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-SQL" data-lang="SQL"><span style="color:#ff79c6">START</span> SLAVE;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-SQL" data-lang="SQL"><span style="color:#ff79c6">START</span> SLAVE;
 <span style="color:#ff79c6">SHOW</span> SLAVE STATUS\<span style="color:#ff79c6">G</span>
 </code></pre></div><h2 id="all-done">All Done</h2>
 <p>You should have a fully functional slave now :-)</p>
