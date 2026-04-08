@@ -1,34 +1,38 @@
 <!doctype html>
 <html lang="en-gb">
   <head>
-    <title>Fast Integration Tests with MySQL // Chris&#39; Blog</title>
+    <title>Fast Integration Tests with MySQL // Christopher&#39;s Blog</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.92.2" />
+    <meta name="generator" content="Hugo 0.160.0">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Christopher Nadeau" />
     <meta name="description" content="How I used triggers to speed up integration tests run against MySQL" />
-    <link rel="stylesheet" href="https://www.nadeau.io/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
+    <link rel="stylesheet" href="https://www.nadeau.tv/css/main.min.4a7ec8660f9a44b08c4da97c5f2e31b1192df1d4d0322e65c0dbbc6ecb1b863f.css" />
 
     
-    <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Fast Integration Tests with MySQL"/>
-<meta name="twitter:description" content="How I used triggers to speed up integration tests run against MySQL"/>
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Fast Integration Tests with MySQL">
+  <meta name="twitter:description" content="How I used triggers to speed up integration tests run against MySQL">
 
-    <meta property="og:title" content="Fast Integration Tests with MySQL" />
-<meta property="og:description" content="How I used triggers to speed up integration tests run against MySQL" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.nadeau.io/post/fast-integration-tests-with-mysql/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-03-23T00:00:00+00:00" />
-<meta property="article:modified_time" content="2021-03-23T00:00:00+00:00" />
-
+    <meta property="og:url" content="https://www.nadeau.tv/post/fast-integration-tests-with-mysql/">
+  <meta property="og:site_name" content="Christopher&#39;s Blog">
+  <meta property="og:title" content="Fast Integration Tests with MySQL">
+  <meta property="og:description" content="How I used triggers to speed up integration tests run against MySQL">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-03-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-03-23T00:00:00+00:00">
+    <meta property="article:tag" content="Engineering">
 
 
   </head>
   <body>
     <header class="app-header">
-      <a href="https://www.nadeau.io/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
-      <h1>Chris&#39; Blog</h1>
+      <a href="https://www.nadeau.tv/"><img class="app-header-avatar" src="/avatar.png" alt="Christopher Nadeau" /></a>
+      <h1>Christopher&#39;s Blog</h1>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/post">Blog</a>
              • 
@@ -48,13 +52,6 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
   <title>Github</title>
   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-</svg>
-          </a>
-        
-          <a href="https://twitter.com/chroder" target="_blank" rel="noreferrer noopener">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-twitter">
-  <title>Twitter</title>
-  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
 </svg>
           </a>
         
@@ -85,7 +82,7 @@
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://www.nadeau.io/tags/engineering/">Engineering</a>
+              <a class="tag" href="https://www.nadeau.tv/tags/engineering/">Engineering</a>
         </div>
       </div>
     </header>
@@ -95,11 +92,11 @@
 <h2 id="resetting-the-db-between-tests">Resetting the DB between tests</h2>
 <p>To ensure tests aren&rsquo;t too fragile, early on we added a <a href="https://jestjs.io/docs/setup-teardown"><code>beforeAll</code></a> routine that reset the database between each suite.</p>
 <p>To reset the database, we were basically doing this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># reset.sh</span>
-mysql -e <span style="color:#f1fa8c">&#39;DROP DATABASE test;&#39;</span>
-mysql -e <span style="color:#f1fa8c">&#39;CREATE DATABASE test;&#39;</span>
-mysql <span style="color:#8be9fd;font-style:italic">test</span> &lt; fixtures.sql
-</code></pre></div><p>This is super simple and just works, but it&rsquo;s a pretty heavy operation. Our product has over 400 tables, and our set of fixture data is quite large because the product is a data-intensive app and it&rsquo;s just a big product. Over time, as one might expect, the tests became slower and slower, and the load on our CI server just kept climbing.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># reset.sh</span>
+</span></span><span style="display:flex;"><span>mysql -e <span style="color:#f1fa8c">&#39;DROP DATABASE test;&#39;</span>
+</span></span><span style="display:flex;"><span>mysql -e <span style="color:#f1fa8c">&#39;CREATE DATABASE test;&#39;</span>
+</span></span><span style="display:flex;"><span>mysql <span style="color:#8be9fd;font-style:italic">test</span> &lt; fixtures.sql
+</span></span></code></pre></div><p>This is super simple and just works, but it&rsquo;s a pretty heavy operation. Our product has over 400 tables, and our set of fixture data is quite large because the product is a data-intensive app and it&rsquo;s just a big product. Over time, as one might expect, the tests became slower and slower, and the load on our CI server just kept climbing.</p>
 <p>So at the point where it was taking ~20 mins to run the suite over 4 workers, I started thinking about ways to improve performance.</p>
 <h2 id="ideas">Ideas</h2>
 <p>There&rsquo;s lots of writing on this you can find via Google and we had some of our own ideas flying around too. Here&rsquo;s a list of a few things we thought about:</p>
@@ -125,145 +122,145 @@ re-seed those tables from the copies.</li>
 <h3 id="in-practice">In Practice</h3>
 <p>I created a Laravel command to &ldquo;install test helpers&rdquo;. This reads the schema and creates the necessary triggers on each table, then creates the necessary copy, and then also creates a special stored procedure to handle resetting the tables after each test.</p>
 <p>Here&rsquo;s what it looks like:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-php" data-lang="php"><span style="color:#ff79c6">&lt;?</span>php
-
-<span style="color:#ff79c6">namespace</span> App\Console\Commands\Test;
-
-<span style="color:#ff79c6">use</span> Illuminate\Console\Command;
-<span style="color:#ff79c6">use</span> Illuminate\Support\Facades\DB;
-<span style="color:#ff79c6">use</span> Illuminate\Support\Str;
-
-<span style="color:#ff79c6">class</span> <span style="color:#50fa7b">InstallHelpersCommand</span> <span style="color:#ff79c6">extends</span> Command
-{
-    <span style="color:#ff79c6">protected</span> <span style="color:#8be9fd;font-style:italic">$signature</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;
-</span><span style="color:#f1fa8c">        test:install-helpers
-</span><span style="color:#f1fa8c">    &#39;</span>;
-
-    <span style="color:#ff79c6">public</span> <span style="color:#ff79c6">function</span> <span style="color:#50fa7b">handle</span>()
-    {
-        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;Create _test_tbl_changed ... &#39;</span>);
-        DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#39;DROP TABLE IF EXISTS `_test_tbl_changed`&#39;</span>);
-        DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#39;
-</span><span style="color:#f1fa8c">            CREATE TABLE `_test_tbl_changed` (
-</span><span style="color:#f1fa8c">              `id` bigint NOT NULL AUTO_INCREMENT,
-</span><span style="color:#f1fa8c">              `tbl` varchar(255) NOT NULL,
-</span><span style="color:#f1fa8c">              PRIMARY KEY (`id`)
-</span><span style="color:#f1fa8c">            ) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4
-</span><span style="color:#f1fa8c">        &#39;</span>);
-        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">writeln</span>(<span style="color:#f1fa8c">&#39;OK&#39;</span>);
-
-        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;Create _testRefillFromSeed procedure ... &#39;</span>);
-        DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#34;DROP PROCEDURE IF EXISTS _testRefillFromSeed&#34;</span>);
-        DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#34;
-</span><span style="color:#f1fa8c">            CREATE PROCEDURE _testRefillFromSeed()
-</span><span style="color:#f1fa8c">            BEGIN
-</span><span style="color:#f1fa8c">                DECLARE done INT DEFAULT 0;
-</span><span style="color:#f1fa8c">                DECLARE numReset INT DEFAULT 0;
-</span><span style="color:#f1fa8c">                DECLARE tblName VARCHAR(255) DEFAULT NULL;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                DECLARE cur CURSOR FOR
-</span><span style="color:#f1fa8c">                    SELECT tbl FROM _test_tbl_changed GROUP BY tbl;
-</span><span style="color:#f1fa8c">                DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                SET @dp_is_refilling=1;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                OPEN cur;
-</span><span style="color:#f1fa8c">                SET FOREIGN_KEY_CHECKS = 0;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                REPEAT
-</span><span style="color:#f1fa8c">                    FETCH cur INTO tblName;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                    IF tblName IS NOT NULL THEN
-</span><span style="color:#f1fa8c">                        SET @TruncateQuery = CONCAT(
-</span><span style="color:#f1fa8c">                            &#39;TRUNCATE &#39;, tblName
-</span><span style="color:#f1fa8c">                        );
-</span><span style="color:#f1fa8c">                        PREPARE stmt FROM @TruncateQuery;
-</span><span style="color:#f1fa8c">                        EXECUTE stmt;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                        SET @InsertQuery = CONCAT(
-</span><span style="color:#f1fa8c">                            &#39;INSERT &#39;, tblName, &#39; &#39;,
-</span><span style="color:#f1fa8c">                            &#39;SELECT * FROM `_test_seed_&#39;, tblName, &#39;`&#39;
-</span><span style="color:#f1fa8c">                        );
-</span><span style="color:#f1fa8c">                        PREPARE stmt FROM @InsertQuery;
-</span><span style="color:#f1fa8c">                        EXECUTE stmt;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                        SET numReset = numReset + 1;
-</span><span style="color:#f1fa8c">                    END IF;
-</span><span style="color:#f1fa8c">                UNTIL done = 1 END REPEAT;
-</span><span style="color:#f1fa8c">                CLOSE cur;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                SET FOREIGN_KEY_CHECKS = 1;
-</span><span style="color:#f1fa8c">                TRUNCATE TABLE _test_tbl_changed;
-</span><span style="color:#f1fa8c">                SET @dp_is_refilling=0;
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                SELECT numReset AS &#39;Number of tables reset&#39;;
-</span><span style="color:#f1fa8c">            END
-</span><span style="color:#f1fa8c">        &#34;</span>);
-        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">writeln</span>(<span style="color:#f1fa8c">&#39;OK&#39;</span>);
-
-        <span style="color:#8be9fd;font-style:italic">$tableNames</span> <span style="color:#ff79c6">=</span> collect(DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">select</span>(<span style="color:#f1fa8c">&#34;SHOW TABLES&#34;</span>))<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">map</span>(fn (<span style="color:#8be9fd;font-style:italic">$r</span>) <span style="color:#ff79c6">=&gt;</span> reset(<span style="color:#8be9fd;font-style:italic">$r</span>));
-
-        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;Creating change watch triggers &#39;</span>);
-        <span style="color:#ff79c6">foreach</span> (<span style="color:#8be9fd;font-style:italic">$tableNames</span> <span style="color:#ff79c6">as</span> <span style="color:#8be9fd;font-style:italic">$tbl</span>) {
-            <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$tbl</span> <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;_test_tbl_changed&#39;</span>) {
-                <span style="color:#ff79c6">continue</span>;
-            }
-
-            <span style="color:#ff79c6">foreach</span> ([<span style="color:#f1fa8c">&#39;INSERT&#39;</span>, <span style="color:#f1fa8c">&#39;UPDATE&#39;</span>, <span style="color:#f1fa8c">&#39;DELETE&#39;</span>] <span style="color:#ff79c6">as</span> <span style="color:#8be9fd;font-style:italic">$event</span>) {
-                <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;.&#39;</span>);
-                <span style="color:#8be9fd;font-style:italic">$id</span> <span style="color:#ff79c6">=</span> md5(<span style="color:#f1fa8c">&#34;change_</span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$tbl</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">_</span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$event</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>);
-                DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">statement</span>(<span style="color:#f1fa8c">&#34;DROP TRIGGER IF EXISTS _test_</span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$id</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>);
-                DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">statement</span>(<span style="color:#f1fa8c">&#34;
-</span><span style="color:#f1fa8c">                    CREATE TRIGGER _test_</span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$id</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">                    AFTER </span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$event</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c"> ON `</span><span style="color:#f1fa8c">$tbl</span><span style="color:#f1fa8c">` FOR EACH ROW
-</span><span style="color:#f1fa8c">                    BEGIN
-</span><span style="color:#f1fa8c">                        IF @dp_is_refilling IS NULL OR @dp_is_refilling != 1 THEN
-</span><span style="color:#f1fa8c">                            INSERT INTO _test_tbl_changed (tbl) VALUES (&#39;</span><span style="color:#f1fa8c">$tbl</span><span style="color:#f1fa8c">&#39;);
-</span><span style="color:#f1fa8c">                        END IF;
-</span><span style="color:#f1fa8c">                    END
-</span><span style="color:#f1fa8c">                &#34;</span>);
-            }
-        }
-        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">writeln</span>(<span style="color:#f1fa8c">&#39; OK&#39;</span>);
-
-        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;Copying seed tables &#39;</span>);
-        <span style="color:#ff79c6">foreach</span> (<span style="color:#8be9fd;font-style:italic">$tableNames</span> <span style="color:#ff79c6">as</span> <span style="color:#8be9fd;font-style:italic">$tbl</span>) {
-            <span style="color:#8be9fd;font-style:italic">$newTbl</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;_test_seed_&#39;</span> <span style="color:#ff79c6">.</span> <span style="color:#8be9fd;font-style:italic">$tbl</span>;
-
-            <span style="color:#ff79c6">if</span> (Str<span style="color:#ff79c6">::</span><span style="color:#50fa7b">startsWith</span>(<span style="color:#8be9fd;font-style:italic">$tbl</span>, <span style="color:#f1fa8c">&#39;_test_&#39;</span>)) {
-                <span style="color:#ff79c6">continue</span>;
-            }
-
-            <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;.&#39;</span>);
-            DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">statement</span>(<span style="color:#f1fa8c">&#34;DROP TABLE IF EXISTS `</span><span style="color:#f1fa8c">$newTbl</span><span style="color:#f1fa8c">`&#34;</span>);
-            DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">statement</span>(<span style="color:#f1fa8c">&#34;CREATE TABLE `</span><span style="color:#f1fa8c">$newTbl</span><span style="color:#f1fa8c">` LIKE `</span><span style="color:#f1fa8c">$tbl</span><span style="color:#f1fa8c">`&#34;</span>);
-            DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#34;
-</span><span style="color:#f1fa8c">                INSERT `</span><span style="color:#f1fa8c">$newTbl</span><span style="color:#f1fa8c">`
-</span><span style="color:#f1fa8c">                SELECT * FROM `</span><span style="color:#f1fa8c">$tbl</span><span style="color:#f1fa8c">`
-</span><span style="color:#f1fa8c">            &#34;</span>);
-        }
-        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">writeln</span>(<span style="color:#f1fa8c">&#39; OK&#39;</span>);
-    }
-}
-</code></pre></div><p>All you need to do is have the test runner execute the special <code>_testRefillFromSeed</code> stored procedure after ever test. In our case, we had an env var that contained the reset command and it was just a matter of setting it:</p>
-<pre tabindex="0"><code>DB_RESET_CMD=&quot;mysql test -N -B -e 'CALL _testRefillFromSeed();'&quot;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#ff79c6">&lt;?</span>php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">namespace</span> App\Console\Commands\Test;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">use</span> Illuminate\Console\Command;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">use</span> Illuminate\Support\Facades\DB;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">use</span> Illuminate\Support\Str;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">InstallHelpersCommand</span> <span style="color:#ff79c6">extends</span> Command
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">protected</span> <span style="color:#8be9fd;font-style:italic">$signature</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        test:install-helpers
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">public</span> <span style="color:#ff79c6">function</span> <span style="color:#50fa7b">handle</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;Create _test_tbl_changed ... &#39;</span>);
+</span></span><span style="display:flex;"><span>        DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#39;DROP TABLE IF EXISTS `_test_tbl_changed`&#39;</span>);
+</span></span><span style="display:flex;"><span>        DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            CREATE TABLE `_test_tbl_changed` (
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">              `id` bigint NOT NULL AUTO_INCREMENT,
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">              `tbl` varchar(255) NOT NULL,
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">              PRIMARY KEY (`id`)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            ) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        &#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">writeln</span>(<span style="color:#f1fa8c">&#39;OK&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;Create _testRefillFromSeed procedure ... &#39;</span>);
+</span></span><span style="display:flex;"><span>        DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#34;DROP PROCEDURE IF EXISTS _testRefillFromSeed&#34;</span>);
+</span></span><span style="display:flex;"><span>        DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            CREATE PROCEDURE _testRefillFromSeed()
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            BEGIN
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                DECLARE done INT DEFAULT 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                DECLARE numReset INT DEFAULT 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                DECLARE tblName VARCHAR(255) DEFAULT NULL;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                DECLARE cur CURSOR FOR
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                    SELECT tbl FROM _test_tbl_changed GROUP BY tbl;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                SET @dp_is_refilling=1;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                OPEN cur;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                SET FOREIGN_KEY_CHECKS = 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                REPEAT
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                    FETCH cur INTO tblName;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                    IF tblName IS NOT NULL THEN
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        SET @TruncateQuery = CONCAT(
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                            &#39;TRUNCATE &#39;, tblName
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        );
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        PREPARE stmt FROM @TruncateQuery;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        EXECUTE stmt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        SET @InsertQuery = CONCAT(
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                            &#39;INSERT &#39;, tblName, &#39; &#39;,
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                            &#39;SELECT * FROM `_test_seed_&#39;, tblName, &#39;`&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        );
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        PREPARE stmt FROM @InsertQuery;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        EXECUTE stmt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        SET numReset = numReset + 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                    END IF;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                UNTIL done = 1 END REPEAT;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                CLOSE cur;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                SET FOREIGN_KEY_CHECKS = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                TRUNCATE TABLE _test_tbl_changed;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                SET @dp_is_refilling=0;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                SELECT numReset AS &#39;Number of tables reset&#39;;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            END
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        &#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">writeln</span>(<span style="color:#f1fa8c">&#39;OK&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$tableNames</span> <span style="color:#ff79c6">=</span> collect(DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">select</span>(<span style="color:#f1fa8c">&#34;SHOW TABLES&#34;</span>))<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">map</span>(fn (<span style="color:#8be9fd;font-style:italic">$r</span>) <span style="color:#ff79c6">=&gt;</span> reset(<span style="color:#8be9fd;font-style:italic">$r</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;Creating change watch triggers &#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">foreach</span> (<span style="color:#8be9fd;font-style:italic">$tableNames</span> <span style="color:#ff79c6">as</span> <span style="color:#8be9fd;font-style:italic">$tbl</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$tbl</span> <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;_test_tbl_changed&#39;</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">foreach</span> ([<span style="color:#f1fa8c">&#39;INSERT&#39;</span>, <span style="color:#f1fa8c">&#39;UPDATE&#39;</span>, <span style="color:#f1fa8c">&#39;DELETE&#39;</span>] <span style="color:#ff79c6">as</span> <span style="color:#8be9fd;font-style:italic">$event</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;.&#39;</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd;font-style:italic">$id</span> <span style="color:#ff79c6">=</span> md5(<span style="color:#f1fa8c">&#34;change_</span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$tbl</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">_</span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$event</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>);
+</span></span><span style="display:flex;"><span>                DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">statement</span>(<span style="color:#f1fa8c">&#34;DROP TRIGGER IF EXISTS _test_</span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$id</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>);
+</span></span><span style="display:flex;"><span>                DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">statement</span>(<span style="color:#f1fa8c">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                    CREATE TRIGGER _test_</span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$id</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                    AFTER </span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">$event</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c"> ON `</span><span style="color:#f1fa8c">$tbl</span><span style="color:#f1fa8c">` FOR EACH ROW
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                    BEGIN
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        IF @dp_is_refilling IS NULL OR @dp_is_refilling != 1 THEN
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                            INSERT INTO _test_tbl_changed (tbl) VALUES (&#39;</span><span style="color:#f1fa8c">$tbl</span><span style="color:#f1fa8c">&#39;);
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                        END IF;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                    END
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                &#34;</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">writeln</span>(<span style="color:#f1fa8c">&#39; OK&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;Copying seed tables &#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">foreach</span> (<span style="color:#8be9fd;font-style:italic">$tableNames</span> <span style="color:#ff79c6">as</span> <span style="color:#8be9fd;font-style:italic">$tbl</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">$newTbl</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;_test_seed_&#39;</span> <span style="color:#ff79c6">.</span> <span style="color:#8be9fd;font-style:italic">$tbl</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (Str<span style="color:#ff79c6">::</span><span style="color:#50fa7b">startsWith</span>(<span style="color:#8be9fd;font-style:italic">$tbl</span>, <span style="color:#f1fa8c">&#39;_test_&#39;</span>)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">write</span>(<span style="color:#f1fa8c">&#39;.&#39;</span>);
+</span></span><span style="display:flex;"><span>            DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">statement</span>(<span style="color:#f1fa8c">&#34;DROP TABLE IF EXISTS `</span><span style="color:#f1fa8c">$newTbl</span><span style="color:#f1fa8c">`&#34;</span>);
+</span></span><span style="display:flex;"><span>            DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">statement</span>(<span style="color:#f1fa8c">&#34;CREATE TABLE `</span><span style="color:#f1fa8c">$newTbl</span><span style="color:#f1fa8c">` LIKE `</span><span style="color:#f1fa8c">$tbl</span><span style="color:#f1fa8c">`&#34;</span>);
+</span></span><span style="display:flex;"><span>            DB<span style="color:#ff79c6">::</span><span style="color:#50fa7b">unprepared</span>(<span style="color:#f1fa8c">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                INSERT `</span><span style="color:#f1fa8c">$newTbl</span><span style="color:#f1fa8c">`
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">                SELECT * FROM `</span><span style="color:#f1fa8c">$tbl</span><span style="color:#f1fa8c">`
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            &#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">$this</span><span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">getOutput</span>()<span style="color:#ff79c6">-&gt;</span><span style="color:#50fa7b">writeln</span>(<span style="color:#f1fa8c">&#39; OK&#39;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>All you need to do is have the test runner execute the special <code>_testRefillFromSeed</code> stored procedure after ever test. In our case, we had an env var that contained the reset command and it was just a matter of setting it:</p>
+<pre tabindex="0"><code>DB_RESET_CMD=&#34;mysql test -N -B -e &#39;CALL _testRefillFromSeed();&#39;&#34;
 </code></pre><p>And from the Jest side looks a little like</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">import</span> { spawnSync } from <span style="color:#f1fa8c">&#39;child_process&#39;</span>;
-beforeAll(() =&gt; {
-  <span style="color:#ff79c6">const</span> options <span style="color:#ff79c6">=</span> {
-    shell<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>,
-    cwd<span style="color:#ff79c6">:</span> __dirname,
-    env<span style="color:#ff79c6">:</span> {...process.env, ...env},
-    stdio<span style="color:#ff79c6">:</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>]
-  };
-  
-  <span style="color:#ff79c6">const</span> status <span style="color:#ff79c6">=</span> spawnSync(process.env.DB_RESET_CMD, <span style="color:#ff79c6">null</span>, options).status;
-  <span style="color:#ff79c6">if</span> (status) {
-    console.error(<span style="color:#f1fa8c">&#39;Failed to reset db with command: &#39;</span> <span style="color:#ff79c6">+</span> process.env.DB_RESET_CMD);
-    process.exit(status);
-  }
-});
-</code></pre></div><p>Easy peasy. Hit all the goals: No changes to tests needed, no changes to infra, and everything is faster with less load on the CI server.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> { spawnSync } from <span style="color:#f1fa8c">&#39;child_process&#39;</span>;
+</span></span><span style="display:flex;"><span>beforeAll(() =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">const</span> options <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span>    shell<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>,
+</span></span><span style="display:flex;"><span>    cwd<span style="color:#ff79c6">:</span> __dirname,
+</span></span><span style="display:flex;"><span>    env<span style="color:#ff79c6">:</span> {...process.env, ...env},
+</span></span><span style="display:flex;"><span>    stdio<span style="color:#ff79c6">:</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>]
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">const</span> status <span style="color:#ff79c6">=</span> spawnSync(process.env.DB_RESET_CMD, <span style="color:#ff79c6">null</span>, options).status;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (status) {
+</span></span><span style="display:flex;"><span>    console.error(<span style="color:#f1fa8c">&#39;Failed to reset db with command: &#39;</span> <span style="color:#ff79c6">+</span> process.env.DB_RESET_CMD);
+</span></span><span style="display:flex;"><span>    process.exit(status);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>Easy peasy. Hit all the goals: No changes to tests needed, no changes to infra, and everything is faster with less load on the CI server.</p>
 
     </div>
     <div class="post-footer">
